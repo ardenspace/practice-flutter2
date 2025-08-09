@@ -1,0 +1,13 @@
+{
+  "cmake.sourceDirectory": "C:/Users/somda/Desktop/development/tiktok_clone/linux",
+  "dart.lineLength": 60,
+  "[dart]": {
+    "editor.defaultFormatter": "Dart-Code.dart-code",
+    "editor.formatOnSave": true,
+    "editor.codeActionsOnSave": {
+      "source.fixAll": "explicit"
+    },
+    "editor.rulers": [60]
+  },
+  "dart.previewFlutterUiGuides": true
+}
