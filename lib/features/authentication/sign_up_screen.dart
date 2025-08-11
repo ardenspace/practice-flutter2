@@ -1,14 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:tiktok_clone/constants/gaps.dart';
 import 'package:tiktok_clone/constants/sizes.dart';
+import 'package:tiktok_clone/features/authentication/login_screen.dart';
 import 'package:tiktok_clone/features/authentication/widgets/auth_button.dart';
 
 class SignUpScreen extends StatelessWidget {
   const SignUpScreen({super.key});
 
   void onLoginTap(BuildContext context) {
-    Navigator.of(context).pop();
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (_) => const LogInScreen(),
+      ),
+    );
   }
+  // 뒤로 갈 페이지가 없는 signup 에서는 push를 써 뒤로 갈 페이지를 만들어주고
+  // 로그인 페이지에서는 pop을 써 페이지가 쌓이지 않게 한다! 굿!
 
   @override
   Widget build(BuildContext context) {
@@ -40,8 +48,15 @@ class SignUpScreen extends StatelessWidget {
                   textAlign: TextAlign.center,
                 ),
                 Gaps.v40,
-                AuthButton(text: "Use phone or email"),
-                AuthButton(text: "Continue with Apple"),
+                AuthButton(
+                  icon: FaIcon(FontAwesomeIcons.user),
+                  text: "Use email & password",
+                ),
+                Gaps.v16,
+                AuthButton(
+                  icon: FaIcon(FontAwesomeIcons.apple),
+                  text: "Continue with Apple",
+                ),
               ],
             ),
           ),
