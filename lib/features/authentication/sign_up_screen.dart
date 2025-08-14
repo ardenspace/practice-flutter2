@@ -28,7 +28,7 @@ class SignUpScreen extends StatelessWidget {
     );
   }
 
-  void onPressUserName(BuildContext context) {
+  void _onPressUserName(BuildContext context) {
     Navigator.of(context).push(
       MaterialPageRoute(
         builder: (context) => const UserNamScreen(),
@@ -78,7 +78,7 @@ class SignUpScreen extends StatelessWidget {
                   ),
                   text: "Continue with Apple",
                   onNavigate: () =>
-                      onPressUserName(context),
+                      _onPressUserName(context),
                 ),
               ],
             ),
