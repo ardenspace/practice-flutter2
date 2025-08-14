@@ -4,6 +4,8 @@ import 'package:tiktok_clone/constants/gaps.dart';
 import 'package:tiktok_clone/constants/sizes.dart';
 import 'package:tiktok_clone/features/authentication/login_screen.dart';
 import 'package:tiktok_clone/features/authentication/widgets/auth_button.dart';
+import 'package:tiktok_clone/features/authentication/widgets/email_screen.dart';
+import 'package:tiktok_clone/features/authentication/widgets/username_screen.dart';
 
 class SignUpScreen extends StatelessWidget {
   const SignUpScreen({super.key});
@@ -18,20 +20,36 @@ class SignUpScreen extends StatelessWidget {
   // 뒤로 갈 페이지가 없는 signup 에서는 push를 써 뒤로 갈 페이지를 만들어주고
   // 로그인 페이지에서는 pop을 써 페이지가 쌓이지 않게 한다! 굿!
 
+  void _onEmailTap(BuildContext context) {
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => const EmailScreen(),
+      ),
+    );
+  }
+
+  void onPressUserName(BuildContext context) {
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => const UserNamScreen(),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: const SafeArea(
+      body: SafeArea(
         child: Align(
           alignment: Alignment.topCenter,
           child: Padding(
-            padding: EdgeInsets.symmetric(
-              horizontal: Sizes.size80,
+            padding: const EdgeInsets.symmetric(
+              horizontal: Sizes.size40,
             ),
             child: Column(
               children: [
                 Gaps.v80,
-                Text(
+                const Text(
                   "Sign up for Tiktok",
                   style: TextStyle(
                     fontSize: Sizes.size24,
@@ -39,7 +57,7 @@ class SignUpScreen extends StatelessWidget {
                   ),
                 ),
                 Gaps.v20,
-                Text(
+                const Text(
                   "Create a profile, follow other accounts, make your own videos, and more.",
                   style: TextStyle(
                     fontSize: Sizes.size16,
@@ -49,13 +67,18 @@ class SignUpScreen extends StatelessWidget {
                 ),
                 Gaps.v40,
                 AuthButton(
-                  icon: FaIcon(FontAwesomeIcons.user),
+                  icon: const FaIcon(FontAwesomeIcons.user),
                   text: "Use email & password",
+                  onNavigate: () => _onEmailTap(context),
                 ),
                 Gaps.v16,
                 AuthButton(
-                  icon: FaIcon(FontAwesomeIcons.apple),
+                  icon: const FaIcon(
+                    FontAwesomeIcons.apple,
+                  ),
                   text: "Continue with Apple",
+                  onNavigate: () =>
+                      onPressUserName(context),
                 ),
               ],
             ),

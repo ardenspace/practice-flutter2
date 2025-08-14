@@ -14,17 +14,17 @@ class LogInScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: const SafeArea(
+      body: SafeArea(
         child: Align(
           alignment: Alignment.topCenter,
           child: Padding(
-            padding: EdgeInsets.symmetric(
+            padding: const EdgeInsets.symmetric(
               horizontal: Sizes.size80,
             ),
             child: Column(
               children: [
                 Gaps.v80,
-                Text(
+                const Text(
                   "Log in to Tiktok",
                   style: TextStyle(
                     fontSize: Sizes.size24,
@@ -32,7 +32,7 @@ class LogInScreen extends StatelessWidget {
                   ),
                 ),
                 Gaps.v20,
-                Text(
+                const Text(
                   "Create a profile, follow other accounts, make your own videos, and more.",
                   style: TextStyle(
                     fontSize: Sizes.size16,
@@ -42,13 +42,17 @@ class LogInScreen extends StatelessWidget {
                 ),
                 Gaps.v40,
                 AuthButton(
-                  icon: FaIcon(FontAwesomeIcons.user),
+                  icon: const FaIcon(FontAwesomeIcons.user),
                   text: "Use email & password",
+                  onNavigate: () => {},
                 ),
                 Gaps.v16,
                 AuthButton(
-                  icon: FaIcon(FontAwesomeIcons.apple),
+                  icon: const FaIcon(
+                    FontAwesomeIcons.apple,
+                  ),
                   text: "Continue with Apple",
+                  onNavigate: () => {},
                 ),
               ],
             ),
