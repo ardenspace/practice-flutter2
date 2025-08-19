@@ -1,10 +1,193 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:tiktok_clone/constants/gaps.dart';
+import 'package:tiktok_clone/constants/sizes.dart';
+import 'package:tiktok_clone/features/authentication/widgets/birthday_screen.dart';
+import 'package:tiktok_clone/features/authentication/widgets/form_button.dart';
 
-class PasswordScreen extends StatelessWidget {
+class PasswordScreen extends StatefulWidget {
   const PasswordScreen({super.key});
 
   @override
+  State<PasswordScreen> createState() =>
+      _PasswordScreenState();
+}
+
+class _PasswordScreenState extends State<PasswordScreen> {
+  final TextEditingController _passwordController =
+      TextEditingController();
+
+  String _password = "";
+  bool _obscureText = true;
+
+  @override
+  void initState() {
+    super.initState();
+
+    _passwordController.addListener(() {
+      setState(() {
+        _password = _passwordController.text;
+      });
+    });
+  }
+
+  @override
+  void dispose() {
+    // 데이터가 없으면 메모리도 지워주도록 dispose
+    _passwordController.dispose();
+    super.dispose();
+  }
+
+  bool _isPasswordValid() {
+    final regExp = RegExp(
+      r"^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[@$!%*#?&\^])[A-Za-z0-9@$!%*#?&\^]{8,20}$",
+    );
+    return _password.isNotEmpty &&
+        regExp.hasMatch(_password);
+  }
+
+  void _onScaffoldTap() {
+    FocusScope.of(context).unfocus();
+  }
+
+  void _onSubmit() {
+    if (!_isPasswordValid()) return;
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => const BirthdayScreen(),
+      ),
+    );
+  }
+
+  void _onClearTap() {
+    _passwordController.clear();
+  }
+
+  void _toggleObscureText() {
+    _obscureText = !_obscureText;
+    setState(() {});
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return const Scaffold();
+    return GestureDetector(
+      onTap: _onScaffoldTap,
+      child: Scaffold(
+        appBar: AppBar(title: const Text("Sign up")),
+        body: Padding(
+          padding: const EdgeInsets.symmetric(
+            horizontal: Sizes.size24,
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Gaps.v20,
+              const Text(
+                "Password",
+                style: TextStyle(
+                  fontSize: Sizes.size20,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              Gaps.v16,
+              TextField(
+                controller: _passwordController,
+                onEditingComplete: _onSubmit,
+                obscureText: _obscureText,
+                autocorrect: false,
+                decoration: InputDecoration(
+                  suffixIcon: Row(
+                    mainAxisSize: MainAxisSize
+                        .min, // 자신에게 필요한 최소한의 공간만을 차지
+                    children: [
+                      GestureDetector(
+                        onTap: _onClearTap,
+                        child: FaIcon(
+                          FontAwesomeIcons.solidCircleXmark,
+                          color: Colors.grey.shade500,
+                          size: Sizes.size20,
+                        ),
+                      ),
+                      Gaps.h16,
+                      GestureDetector(
+                        onTap: _toggleObscureText,
+                        child: FaIcon(
+                          _obscureText
+                              ? FontAwesomeIcons.eye
+                              : FontAwesomeIcons.eyeSlash,
+                          color: Colors.grey.shade500,
+                          size: Sizes.size20,
+                        ),
+                      ),
+                    ],
+                  ),
+                  hintText: "Make it strong!",
+                  enabledBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(
+                      color: Colors.grey.shade400,
+                    ),
+                  ),
+                  focusedBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(
+                      color: Colors.grey.shade400,
+                    ),
+                  ),
+                ),
+                cursorColor: Theme.of(context).primaryColor,
+              ),
+              Gaps.v10,
+              const Text(
+                "Your password must have:",
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              Gaps.v10,
+              Column(
+                children: [
+                  Row(
+                    children: [
+                      FaIcon(
+                        FontAwesomeIcons.circleCheck,
+                        size: Sizes.size20,
+                        color: _isPasswordValid()
+                            ? Colors.green
+                            : Colors.grey.shade500,
+                      ),
+                      Gaps.h5,
+                      const Text("8 to 20 characters"),
+                    ],
+                  ),
+                  Gaps.v8,
+                  Row(
+                    children: [
+                      FaIcon(
+                        FontAwesomeIcons.circleCheck,
+                        size: Sizes.size20,
+                        color: _isPasswordValid()
+                            ? Colors.green
+                            : Colors.grey.shade500,
+                      ),
+                      Gaps.h5,
+                      const Text(
+                        "Letters, numbers, and special characters",
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+              Gaps.v16,
+              GestureDetector(
+                onTap: _onSubmit,
+                child: FormButton(
+                  disabled: !_isPasswordValid(),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
   }
 }
