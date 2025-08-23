@@ -3,12 +3,21 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:tiktok_clone/constants/gaps.dart';
 import 'package:tiktok_clone/constants/sizes.dart';
 import 'package:tiktok_clone/features/authentication/widgets/auth_button.dart';
+import 'package:tiktok_clone/features/authentication/widgets/login_form_screen.dart';
 
 class LogInScreen extends StatelessWidget {
   const LogInScreen({super.key});
 
   void onSignupTap(BuildContext context) {
     Navigator.of(context).pop();
+  }
+
+  void _onEmailLoginTop(BuildContext context) {
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => const LoginFormScreen(),
+      ),
+    );
   }
 
   @override
@@ -44,7 +53,8 @@ class LogInScreen extends StatelessWidget {
                 AuthButton(
                   icon: const FaIcon(FontAwesomeIcons.user),
                   text: "Use email & password",
-                  onNavigate: () => {},
+                  onNavigate: () =>
+                      _onEmailLoginTop(context),
                 ),
                 Gaps.v16,
                 AuthButton(
