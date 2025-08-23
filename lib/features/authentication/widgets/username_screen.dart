@@ -94,6 +94,7 @@ class _UserNamScreenState extends State<UserNamScreen> {
             GestureDetector(
               onTap: _onNextTap,
               child: FormButton(
+                text: "Next",
                 disabled: _username.isEmpty,
               ),
             ),
