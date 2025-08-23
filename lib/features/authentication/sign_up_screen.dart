@@ -50,7 +50,7 @@ class SignUpScreen extends StatelessWidget {
               children: [
                 Gaps.v80,
                 const Text(
-                  "Sign up for Tiktok",
+                  'Sign up for Tiktok',
                   style: TextStyle(
                     fontSize: Sizes.size24,
                     fontWeight: FontWeight.w700,
@@ -58,7 +58,7 @@ class SignUpScreen extends StatelessWidget {
                 ),
                 Gaps.v20,
                 const Text(
-                  "Create a profile, follow other accounts, make your own videos, and more.",
+                  'Create a profile, follow other accounts, make your own videos, and more.',
                   style: TextStyle(
                     fontSize: Sizes.size16,
                     color: Colors.black54,
@@ -68,7 +68,7 @@ class SignUpScreen extends StatelessWidget {
                 Gaps.v40,
                 AuthButton(
                   icon: const FaIcon(FontAwesomeIcons.user),
-                  text: "Use email & password",
+                  text: 'Use email & password',
                   onNavigate: () => _onEmailTap(context),
                 ),
                 Gaps.v16,
@@ -76,7 +76,7 @@ class SignUpScreen extends StatelessWidget {
                   icon: const FaIcon(
                     FontAwesomeIcons.apple,
                   ),
-                  text: "Continue with Apple",
+                  text: 'Continue with Apple',
                   onNavigate: () =>
                       _onPressUserName(context),
                 ),
@@ -87,38 +87,55 @@ class SignUpScreen extends StatelessWidget {
       ),
       bottomNavigationBar: Container(
         decoration: BoxDecoration(
-          color: Colors.grey[100],
-          boxShadow: [
+          color: Colors.grey.shade100,
+          boxShadow: const [
             BoxShadow(
               // 위쪽에 그림자가 들어가지 않아 이렇게 .. 표현
-              color: Colors.black.withValues(alpha: 0.1),
-              offset: const Offset(0, -2),
+              color: Color.fromRGBO(0, 0, 0, 0.1),
+              offset: Offset(0, -2),
               blurRadius: 6,
             ),
           ],
         ),
-        child: BottomAppBar(
+        child: const BottomAppBar(
           color: Colors.transparent,
           elevation: 0,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const Text('Already have an account?'),
-              const SizedBox(width: 5),
-              GestureDetector(
-                onTap: () => onLoginTap(context),
-                child: Text(
-                  "Log in",
-                  style: TextStyle(
-                    color: Theme.of(context).primaryColor,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-              ),
-            ],
-          ),
+          child: _BottomNavigationContent(),
         ),
       ),
+    );
+  }
+}
+
+class _BottomNavigationContent extends StatelessWidget {
+  const _BottomNavigationContent();
+
+  void _onLoginTap(BuildContext context) {
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (_) => const LogInScreen(),
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        const Text('Already have an account?'),
+        const SizedBox(width: 5),
+        GestureDetector(
+          onTap: () => _onLoginTap(context),
+          child: Text(
+            'Log in',
+            style: TextStyle(
+              color: Theme.of(context).primaryColor,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+        ),
+      ],
     );
   }
 }
