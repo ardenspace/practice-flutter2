@@ -21,8 +21,26 @@ linter:
   # `// ignore_for_file: name_of_lint` syntax on the line or in the file
   # producing the lint.
   rules:
+    # Performance-focused rules
     prefer_const_constructors: true
-    # avoid_print: false  # Uncomment to disable the `avoid_print` rule
-    # prefer_single_quotes: true  # Uncomment to enable the `prefer_single_quotes` rule
+    prefer_const_constructors_in_immutables: true
+    prefer_const_declarations: true
+    prefer_const_literals_to_create_immutables: true
+    avoid_unnecessary_containers: true
+    sized_box_for_whitespace: true
+    use_key_in_widget_constructors: true
+    
+    # Code quality rules
+    avoid_print: true
+    avoid_function_literals_in_foreach_calls: true
+    prefer_single_quotes: true
+    unnecessary_const: true
+    unnecessary_new: true
+    
+    # Performance optimization rules
+    avoid_returning_null_for_void: true
+    prefer_is_empty: true
+    prefer_is_not_empty: true
+    
 # Additional information about this file can be found at
 # https://dart.dev/guides/language/analysis-options
