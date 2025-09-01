@@ -16,9 +16,6 @@ class _MainNavigationScreenState
   final screenList = [
     const Center(child: Text("Home")),
     const Center(child: Text("Search")),
-    // const Center(child: Text("other")),
-    // const Center(child: Text("QNdldQNdld")),
-    // const Center(child: Text("dmdkdkdk")),
   ];
 
   void _onTap(int index) {
@@ -31,21 +28,19 @@ class _MainNavigationScreenState
   Widget build(BuildContext context) {
     return Scaffold(
       body: screenList[_selectedIndex],
-      bottomNavigationBar: BottomNavigationBar(
-        type: BottomNavigationBarType.shifting,
-        currentIndex: _selectedIndex,
-        onTap: _onTap,
-        selectedItemColor: Theme.of(context).primaryColor,
-        items: [
-          const BottomNavigationBarItem(
+      bottomNavigationBar: NavigationBar(
+        labelBehavior: NavigationDestinationLabelBehavior
+            .onlyShowSelected,
+        selectedIndex: _selectedIndex,
+        onDestinationSelected: _onTap,
+        destinations: [
+          const NavigationDestination(
             icon: FaIcon(FontAwesomeIcons.house),
             label: "Home",
-            backgroundColor: Colors.amber,
           ),
-          const BottomNavigationBarItem(
-            icon: FaIcon(FontAwesomeIcons.magnifyingGlass),
+          const NavigationDestination(
+            icon: FaIcon(FontAwesomeIcons.searchengin),
             label: "Search",
-            backgroundColor: Colors.blue,
           ),
         ],
       ),
