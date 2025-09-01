@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:tiktok_clone/features/main_navigation/widgets/nav_tab.dart';
 
 class MainNavigationScreen extends StatefulWidget {
   const MainNavigationScreen({super.key});
@@ -16,6 +17,9 @@ class _MainNavigationScreenState
   final screenList = [
     const Center(child: Text("Home")),
     const Center(child: Text("Search")),
+    const Center(child: Text("middle")),
+    const Center(child: Text("Inbox")),
+    const Center(child: Text("Profile")),
   ];
 
   void _onTap(int index) {
@@ -27,22 +31,61 @@ class _MainNavigationScreenState
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: screenList[_selectedIndex],
-      bottomNavigationBar: NavigationBar(
-        labelBehavior: NavigationDestinationLabelBehavior
-            .onlyShowSelected,
-        selectedIndex: _selectedIndex,
-        onDestinationSelected: _onTap,
-        destinations: [
-          const NavigationDestination(
-            icon: FaIcon(FontAwesomeIcons.house),
-            label: "Home",
+      body: Stack(
+        children: [
+          Offstage(
+            offstage: _selectedIndex != 0,
+            child: screenList[_selectedIndex],
           ),
-          const NavigationDestination(
-            icon: FaIcon(FontAwesomeIcons.searchengin),
-            label: "Search",
+          Offstage(
+            offstage: _selectedIndex != 1,
+            child: screenList[_selectedIndex],
+          ),
+          Offstage(
+            offstage: _selectedIndex != 3,
+            child: screenList[_selectedIndex],
+          ),
+          Offstage(
+            offstage: _selectedIndex != 4,
+            child: screenList[_selectedIndex],
           ),
         ],
+      ),
+      bottomNavigationBar: BottomAppBar(
+        color: Colors.black,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            NavTab(
+              text: "Home",
+              isSelected: _selectedIndex == 0,
+              icon: FontAwesomeIcons.house,
+              selectedIcon: FontAwesomeIcons.house,
+              onTap: () => _onTap(0),
+            ),
+            NavTab(
+              text: "Discover",
+              isSelected: _selectedIndex == 1,
+              icon: FontAwesomeIcons.compass,
+              selectedIcon: FontAwesomeIcons.solidCompass,
+              onTap: () => _onTap(1),
+            ),
+            NavTab(
+              text: "Inbox",
+              isSelected: _selectedIndex == 3,
+              icon: FontAwesomeIcons.message,
+              selectedIcon: FontAwesomeIcons.solidMessage,
+              onTap: () => _onTap(3),
+            ),
+            NavTab(
+              text: "Profile",
+              isSelected: _selectedIndex == 4,
+              icon: FontAwesomeIcons.user,
+              selectedIcon: FontAwesomeIcons.solidUser,
+              onTap: () => _onTap(4),
+            ),
+          ],
+        ),
       ),
     );
   }
