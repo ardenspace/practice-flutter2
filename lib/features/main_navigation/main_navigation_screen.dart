@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:tiktok_clone/constants/gaps.dart';
 import 'package:tiktok_clone/features/main_navigation/widgets/nav_tab.dart';
+import 'package:tiktok_clone/features/main_navigation/widgets/post_video_button.dart';
 
 class MainNavigationScreen extends StatefulWidget {
   const MainNavigationScreen({super.key});
@@ -13,6 +15,7 @@ class MainNavigationScreen extends StatefulWidget {
 class _MainNavigationScreenState
     extends State<MainNavigationScreen> {
   int _selectedIndex = 0;
+  bool _isPostButtonPressed = false;
 
   final screenList = [
     const Center(child: Text("Home")),
@@ -26,6 +29,17 @@ class _MainNavigationScreenState
     setState(() {
       _selectedIndex = index;
     });
+  }
+
+  void _onPostVideoButtonTap() {
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => Scaffold(
+          appBar: AppBar(title: const Text("Record video")),
+        ),
+        fullscreenDialog: true,
+      ),
+    );
   }
 
   @override
@@ -70,6 +84,23 @@ class _MainNavigationScreenState
               selectedIcon: FontAwesomeIcons.solidCompass,
               onTap: () => _onTap(1),
             ),
+            Gaps.h24,
+            GestureDetector(
+              onTapDown: (_) => setState(
+                () => _isPostButtonPressed = true,
+              ),
+              onTapUp: (_) => setState(
+                () => _isPostButtonPressed = false,
+              ),
+              onTapCancel: () => setState(
+                () => _isPostButtonPressed = false,
+              ),
+              onTap: _onPostVideoButtonTap,
+              child: PostVideoButton(
+                isPressed: _isPostButtonPressed,
+              ),
+            ),
+            Gaps.h24,
             NavTab(
               text: "Inbox",
               isSelected: _selectedIndex == 3,
