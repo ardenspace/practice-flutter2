@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tiktok_clone/features/videos/video_post.dart';
 
 class VideoTimelineScreen extends StatefulWidget {
   const VideoTimelineScreen({super.key});
@@ -23,7 +24,7 @@ class _VideoTimelineScreenState
   void _onChangePages(int page) {
     _pageController.animateToPage(
       page,
-      duration: const Duration(microseconds: 100),
+      duration: const Duration(microseconds: 150),
       curve: Curves.linear,
     );
 
@@ -47,8 +48,7 @@ class _VideoTimelineScreenState
       scrollDirection: Axis.vertical,
       onPageChanged: _onChangePages,
       itemCount: _itemCount,
-      itemBuilder: (context, index) =>
-          Container(color: colors[index]),
+      itemBuilder: (context, index) => const VidoeoPost(),
     );
   }
 }
