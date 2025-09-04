@@ -46,6 +46,9 @@ class _VideoTimelineScreenState
       scrollDirection: Axis.vertical,
       onPageChanged: _onPageChanged,
       itemCount: _itemCount,
+      physics: const ClampingScrollPhysics(),
+      // 다음 페이지를 미리 로드하여 하얀 화면 방지
+      pageSnapping: true,
       itemBuilder: (context, index) =>
           VideoPost(onVideoFinished: _onVideoFinished),
     );

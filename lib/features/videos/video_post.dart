@@ -25,10 +25,9 @@ class _VideoPostState extends State<VideoPost> {
       final position =
           _videoPlayerController.value.position;
 
+      // 비디오가 끝나기 500ms 전에 다음으로 넘어가기 (로딩 시간 확보)
       if (duration.inMilliseconds > 0 &&
-          position.inMilliseconds > 0 &&
-          position.inMilliseconds >=
-              duration.inMilliseconds * 0.95) {
+          (duration - position).inMilliseconds <= 500) {
         widget.onVideoFinished();
       }
     }
@@ -36,10 +35,13 @@ class _VideoPostState extends State<VideoPost> {
 
   void _initVideoPlayer() async {
     try {
+      // 비디오를 미리 로드
       await _videoPlayerController.initialize();
-      _videoPlayerController.play();
-      setState(() {});
-      _videoPlayerController.addListener(_onVideoChanged);
+      if (mounted) {
+        setState(() {});
+        _videoPlayerController.play();
+        _videoPlayerController.addListener(_onVideoChanged);
+      }
     } catch (e) {
       debugPrint('Video initialization error: $e');
     }
