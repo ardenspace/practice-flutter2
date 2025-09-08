@@ -3,9 +3,11 @@ import 'package:video_player/video_player.dart';
 
 class VideoPost extends StatefulWidget {
   final Function onVideoFinished;
+  final int index;
   const VideoPost({
     super.key,
     required this.onVideoFinished,
+    required this.index,
   });
 
   @override

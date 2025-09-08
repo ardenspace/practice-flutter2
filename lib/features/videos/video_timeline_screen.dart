@@ -49,8 +49,10 @@ class _VideoTimelineScreenState
       physics: const ClampingScrollPhysics(),
       // 다음 페이지를 미리 로드하여 하얀 화면 방지
       pageSnapping: true,
-      itemBuilder: (context, index) =>
-          VideoPost(onVideoFinished: _onVideoFinished),
+      itemBuilder: (context, index) => VideoPost(
+        onVideoFinished: _onVideoFinished,
+        index: index,
+      ),
     );
   }
 }
