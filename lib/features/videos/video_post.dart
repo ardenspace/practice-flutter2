@@ -1,9 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:tiktok_clone/constants/sizes.dart';
 import 'package:video_player/video_player.dart';
+import 'package:visibility_detector/visibility_detector.dart';
 
 class VideoPost extends StatefulWidget {
   final Function onVideoFinished;
+
   final int index;
+
   const VideoPost({
     super.key,
     required this.onVideoFinished,
@@ -20,16 +25,15 @@ class _VideoPostState extends State<VideoPost> {
         "assets/videos/test_video.mp4",
       );
 
-  void _onVideoChanged() {
-    if (_videoPlayerController.value.isInitialized) {
-      final duration =
-          _videoPlayerController.value.duration;
-      final position =
-          _videoPlayerController.value.position;
+  final bool _isPaused = false;
+  final Duration _animataionDuration = const Duration(
+    milliseconds: 300,
+  );
 
-      // 비디오가 끝나기 500ms 전에 다음으로 넘어가기 (로딩 시간 확보)
-      if (duration.inMilliseconds > 0 &&
-          (duration - position).inMilliseconds <= 500) {
+  void _onVideoChange() {
+    if (_videoPlayerController.value.isInitialized) {
+      if (_videoPlayerController.value.duration ==
+          _videoPlayerController.value.position) {
         widget.onVideoFinished();
       }
     }
@@ -37,12 +41,10 @@ class _VideoPostState extends State<VideoPost> {
 
   void _initVideoPlayer() async {
     try {
-      // 비디오를 미리 로드
       await _videoPlayerController.initialize();
       if (mounted) {
         setState(() {});
-        _videoPlayerController.play();
-        _videoPlayerController.addListener(_onVideoChanged);
+        _videoPlayerController.addListener(_onVideoChange);
       }
     } catch (e) {
       debugPrint('Video initialization error: $e');
@@ -61,16 +63,54 @@ class _VideoPostState extends State<VideoPost> {
     super.dispose();
   }
 
+  void _onVisibilityChanged(VisibilityInfo info) {
+    if (info.visibleFraction == 1 &&
+        !_videoPlayerController.value.isPlaying) {
+      _videoPlayerController.play();
+    }
+  }
+
+  void _onTogglePause() {
+    if (_videoPlayerController.value.isPlaying) {
+      _videoPlayerController.pause();
+    } else {
+      _videoPlayerController.play();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        Positioned.fill(
-          child: _videoPlayerController.value.isInitialized
-              ? VideoPlayer(_videoPlayerController)
-              : Container(color: Colors.black),
-        ),
-      ],
+    return VisibilityDetector(
+      key: Key("${widget.index}"),
+      onVisibilityChanged: _onVisibilityChanged,
+      child: Stack(
+        children: [
+          Positioned.fill(
+            child:
+                _videoPlayerController.value.isInitialized
+                ? VideoPlayer(_videoPlayerController)
+                : Container(color: Colors.black),
+          ),
+          Positioned.fill(
+            child: GestureDetector(onTap: _onTogglePause),
+          ),
+          const Positioned.fill(
+            child: IgnorePointer(
+              child: Center(
+                child: AnimatedOpacity(
+                  duration: _animataionDuration,
+                  opacity: _isPaused ? 1 : 0,
+                  child: FaIcon(
+                    FontAwesomeIcons.play,
+                    color: Colors.white,
+                    size: Sizes.size52,
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
