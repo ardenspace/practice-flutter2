@@ -32,6 +32,8 @@ class _VideoPostState extends State<VideoPost>
   );
   late final AnimationController _animatedController;
 
+  bool _isViewMore = false;
+
   void _onVideoChange() {
     if (_videoPlayerController.value.isInitialized) {
       if (_videoPlayerController.value.duration ==
@@ -93,6 +95,12 @@ class _VideoPostState extends State<VideoPost>
     });
   }
 
+  void _onViewMoreTap() {
+    setState(() {
+      _isViewMore = !_isViewMore;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return VisibilityDetector(
@@ -138,13 +146,14 @@ class _VideoPostState extends State<VideoPost>
               ),
             ),
           ),
-          const Positioned(
+          Positioned(
             bottom: 30,
             left: 10,
+            right: 80,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
+                const Text(
                   "@hyeono",
                   style: TextStyle(
                     color: Colors.white,
@@ -153,7 +162,7 @@ class _VideoPostState extends State<VideoPost>
                   ),
                 ),
                 Gaps.v10,
-                Text(
+                const Text(
                   "I got this for free!",
                   style: TextStyle(
                     color: Colors.white,
@@ -161,12 +170,33 @@ class _VideoPostState extends State<VideoPost>
                   ),
                 ),
                 Gaps.v10,
-                Text(
-                  "I got this for free!",
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: Sizes.size16,
-                  ),
+                Row(
+                  children: [
+                    Expanded(
+                      child: Text(
+                        "I got this for free! blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah",
+                        maxLines: _isViewMore ? null : 1,
+                        overflow: _isViewMore
+                            ? null
+                            : TextOverflow.ellipsis,
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: Sizes.size16,
+                        ),
+                      ),
+                    ),
+                    if (!_isViewMore)
+                      GestureDetector(
+                        onTap: _onViewMoreTap,
+                        child: const Text(
+                          "View more",
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                  ],
                 ),
               ],
             ),
