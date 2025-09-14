@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:tiktok_clone/constants/gaps.dart';
 import 'package:tiktok_clone/constants/sizes.dart';
+import 'package:tiktok_clone/features/videos/widgets/video_button.dart';
 import 'package:video_player/video_player.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 
@@ -21,10 +23,8 @@ class VideoPost extends StatefulWidget {
 
 class _VideoPostState extends State<VideoPost>
     with SingleTickerProviderStateMixin {
-  final VideoPlayerController _videoPlayerController =
-      VideoPlayerController.asset(
-        "assets/videos/test_video.mp4",
-      );
+  // with에 mixin을 사용하면 클래스의 메서드와 속성을 전부 가져오겠다는 뜻이 된다.
+  late final VideoPlayerController _videoPlayerController;
 
   bool _isPaused = false;
   final Duration _animataionDuration = const Duration(
@@ -42,15 +42,13 @@ class _VideoPostState extends State<VideoPost>
   }
 
   void _initVideoPlayer() async {
-    try {
-      await _videoPlayerController.initialize();
-      if (mounted) {
-        setState(() {});
-        _videoPlayerController.addListener(_onVideoChange);
-      }
-    } catch (e) {
-      debugPrint('Video initialization error: $e');
-    }
+    _videoPlayerController = VideoPlayerController.asset(
+      "assets/videos/test_video.mp4",
+    );
+    await _videoPlayerController.initialize();
+    await _videoPlayerController.setLooping(true);
+    _videoPlayerController.addListener(_onVideoChange);
+    setState(() {});
   }
 
   @override
@@ -59,7 +57,9 @@ class _VideoPostState extends State<VideoPost>
     _initVideoPlayer();
 
     _animatedController = AnimationController(
-      vsync: this,
+      vsync:
+          this, // vsync은 쉽게 말하면 위젯이 안 보일 때에는 애니메이션이 작동하지 않게 해준다.
+      // 불필요한 리소스 낭비를 막아줌 여기서 this는 _VideoPostState를 뜻함.
       lowerBound: 1.0,
       upperBound: 1.5,
       value: 1.5,
@@ -136,6 +136,71 @@ class _VideoPostState extends State<VideoPost>
                   ),
                 ),
               ),
+            ),
+          ),
+          const Positioned(
+            bottom: 30,
+            left: 10,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  "@hyeono",
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                    fontSize: Sizes.size20,
+                  ),
+                ),
+                Gaps.v10,
+                Text(
+                  "I got this for free!",
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: Sizes.size16,
+                  ),
+                ),
+                Gaps.v10,
+                Text(
+                  "I got this for free!",
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: Sizes.size16,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          const Positioned(
+            bottom: 20,
+            right: 10,
+            child: Column(
+              children: [
+                CircleAvatar(
+                  radius: 25,
+                  backgroundColor: Colors.black,
+                  foregroundColor: Colors.white,
+                  foregroundImage: NetworkImage(
+                    "https://avatars.githubusercontent.com/u/202112113?s=400&u=d44fdf9d52f4e677b0dec4786da0cfde6bed80e7&v=4",
+                  ),
+                  child: Text("hyeon"),
+                ),
+                Gaps.v20,
+                VideoButton(
+                  icon: FontAwesomeIcons.solidHeart,
+                  text: "2.9M",
+                ),
+                Gaps.v16,
+                VideoButton(
+                  icon: FontAwesomeIcons.solidComment,
+                  text: "33K",
+                ),
+                Gaps.v16,
+                VideoButton(
+                  icon: FontAwesomeIcons.share,
+                  text: "Share",
+                ),
+              ],
             ),
           ),
         ],
