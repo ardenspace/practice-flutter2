@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:tiktok_clone/features/videos/video_post.dart';
+import 'package:tiktok_clone/features/videos/widgets/video_post.dart';
 
 class VideoTimelineScreen extends StatefulWidget {
   const VideoTimelineScreen({super.key});
@@ -33,10 +33,7 @@ class _VideoTimelineScreenState
   }
 
   void _onVideoFinished() {
-    _pageController.nextPage(
-      duration: _scrollDuration,
-      curve: _scrollCurve,
-    );
+    return;
   }
 
   @override
@@ -45,16 +42,26 @@ class _VideoTimelineScreenState
     super.dispose();
   }
 
+  Future<void> _onRefresh() {
+    return Future.delayed(const Duration(seconds: 5));
+  }
+
   @override
   Widget build(BuildContext context) {
-    return PageView.builder(
-      controller: _pageController,
-      scrollDirection: Axis.vertical,
-      onPageChanged: _onPageChanged,
-      itemCount: _itemCount,
-      itemBuilder: (context, index) => VideoPost(
-        onVideoFinished: _onVideoFinished,
-        index: index,
+    return RefreshIndicator(
+      onRefresh: _onRefresh,
+      displacement: 50,
+      edgeOffset: 10,
+      color: Theme.of(context).primaryColor,
+      child: PageView.builder(
+        controller: _pageController,
+        scrollDirection: Axis.vertical,
+        onPageChanged: _onPageChanged,
+        itemCount: _itemCount,
+        itemBuilder: (context, index) => VideoPost(
+          onVideoFinished: _onVideoFinished,
+          index: index,
+        ),
       ),
     );
   }
