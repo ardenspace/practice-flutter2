@@ -71,7 +71,10 @@ class _MainNavigationScreenState
         ],
       ),
       bottomNavigationBar: BottomAppBar(
-        color: Colors.black,
+        elevation: 0.0,
+        color: _selectedIndex == 0
+            ? Colors.black
+            : Colors.white,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
@@ -81,6 +84,7 @@ class _MainNavigationScreenState
               icon: FontAwesomeIcons.house,
               selectedIcon: FontAwesomeIcons.house,
               onTap: () => _onTap(0),
+              selectedIndex: _selectedIndex,
             ),
             NavTab(
               text: "Discover",
@@ -88,6 +92,7 @@ class _MainNavigationScreenState
               icon: FontAwesomeIcons.compass,
               selectedIcon: FontAwesomeIcons.solidCompass,
               onTap: () => _onTap(1),
+              selectedIndex: _selectedIndex,
             ),
             Gaps.h24,
             GestureDetector(
@@ -103,6 +108,7 @@ class _MainNavigationScreenState
               onTap: _onPostVideoButtonTap,
               child: PostVideoButton(
                 isPressed: _isPostButtonPressed,
+                inverted: _selectedIndex == 0,
               ),
             ),
             Gaps.h24,
@@ -112,6 +118,7 @@ class _MainNavigationScreenState
               icon: FontAwesomeIcons.message,
               selectedIcon: FontAwesomeIcons.solidMessage,
               onTap: () => _onTap(3),
+              selectedIndex: _selectedIndex,
             ),
             NavTab(
               text: "Profile",
@@ -119,6 +126,7 @@ class _MainNavigationScreenState
               icon: FontAwesomeIcons.user,
               selectedIcon: FontAwesomeIcons.solidUser,
               onTap: () => _onTap(4),
+              selectedIndex: _selectedIndex,
             ),
           ],
         ),
