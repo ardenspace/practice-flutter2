@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:tiktok_clone/constants/gaps.dart';
@@ -26,19 +25,26 @@ class _DiscoverScreenState extends State<DiscoverScreen>
     with SingleTickerProviderStateMixin {
   final TextEditingController _textEditingController =
       TextEditingController(text: "initial text");
-
-  void _onSearchChanged(String value) {
-    print(value);
-  }
-
-  void _onSearchSubmitted(String value) {
-    print(value);
-  }
+  bool _isWriting = false;
 
   @override
   void dispose() {
     _textEditingController.dispose();
     super.dispose();
+  }
+
+  void _onDismissKeyboard(BuildContext context) {
+    _textEditingController.clear();
+    FocusScope.of(context).unfocus();
+    setState(() {
+      _isWriting = false;
+    });
+  }
+
+  void _onStartWriting() {
+    setState(() {
+      _isWriting = true;
+    });
   }
 
   @override
@@ -61,10 +67,68 @@ class _DiscoverScreenState extends State<DiscoverScreen>
             resizeToAvoidBottomInset: false,
             appBar: AppBar(
               elevation: 1,
-              title: CupertinoSearchTextField(
-                controller: _textEditingController,
-                onChanged: _onSearchChanged,
-                onSubmitted: _onSearchSubmitted,
+              title: Expanded(
+                child: Row(
+                  children: [
+                    FaIcon(
+                      FontAwesomeIcons.arrowLeft,
+                      color: Colors.grey.shade900,
+                      size: 20,
+                    ),
+                    Gaps.h10,
+                    Expanded(
+                      child: TextField(
+                        controller: _textEditingController,
+                        onTap: _onStartWriting,
+                        minLines: null,
+                        maxLines: null,
+                        textInputAction:
+                            TextInputAction.newline,
+                        decoration: InputDecoration(
+                          hintText: "Add a comment...",
+                          border: const OutlineInputBorder(
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(Sizes.size20),
+                            ),
+                            borderSide: BorderSide.none,
+                          ),
+                          filled: true,
+                          fillColor: Colors.grey.shade100,
+                          contentPadding:
+                              const EdgeInsets.symmetric(
+                                horizontal: Sizes.size16,
+                                vertical: Sizes.size8,
+                              ),
+                          suffix: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              if (_isWriting)
+                                GestureDetector(
+                                  onTap: () =>
+                                      _onDismissKeyboard(
+                                        context,
+                                      ),
+                                  child: FaIcon(
+                                    FontAwesomeIcons
+                                        .solidCircleXmark,
+                                    color: Colors
+                                        .grey
+                                        .shade500,
+                                  ),
+                                ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                    Gaps.h10,
+                    FaIcon(
+                      FontAwesomeIcons.coins,
+                      color: Colors.grey.shade900,
+                      size: 20,
+                    ),
+                  ],
+                ),
               ),
               bottom: TabBar(
                 splashFactory: NoSplash.splashFactory,
