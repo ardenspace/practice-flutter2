@@ -93,7 +93,7 @@ class _DiscoverScreenState extends State<DiscoverScreen>
                             borderSide: BorderSide.none,
                           ),
                           filled: true,
-                          fillColor: Colors.grey.shade100,
+                          fillColor: Colors.grey.shade200,
                           contentPadding:
                               const EdgeInsets.symmetric(
                                 horizontal: Sizes.size16,
