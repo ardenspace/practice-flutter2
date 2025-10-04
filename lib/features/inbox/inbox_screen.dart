@@ -11,7 +11,7 @@ class InboxScreen extends StatelessWidget {
   void _onActivityTap(BuildContext context) {
     Navigator.of(context).push(
       MaterialPageRoute(
-        builder: (context) => const ActivityScreen(),
+        builder: (context) => ActivityScreen(),
       ),
     );
   }
