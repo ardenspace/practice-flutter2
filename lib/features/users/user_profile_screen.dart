@@ -228,15 +228,40 @@ class _UserProfileScreenState
                     ),
                 itemBuilder: (context, index) => Column(
                   children: [
-                    AspectRatio(
-                      aspectRatio: 9 / 14,
-                      child: FadeInImage.assetNetwork(
-                        fit: BoxFit.cover,
-                        placeholder:
-                            "assets/images/test-image4.jpg",
-                        image:
-                            "https://images.unsplash.com/photo-1758723208958-c18fa48aaff3?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-                      ),
+                    Stack(
+                      children: [
+                        AspectRatio(
+                          aspectRatio: 9 / 14,
+                          child: FadeInImage.assetNetwork(
+                            fit: BoxFit.cover,
+                            placeholder:
+                                "assets/images/test-image4.jpg",
+                            image:
+                                "https://images.unsplash.com/photo-1758723208958-c18fa48aaff3?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+                          ),
+                        ),
+                        const Positioned(
+                          bottom: 0,
+                          left: Sizes.size5,
+                          right: 0,
+                          child: Row(
+                            children: [
+                              FaIcon(
+                                FontAwesomeIcons.play,
+                                color: Colors.white,
+                                size: Sizes.size16,
+                              ),
+                              Gaps.h4,
+                              Text(
+                                "1:00",
+                                style: TextStyle(
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
                     ),
                   ],
                 ),
