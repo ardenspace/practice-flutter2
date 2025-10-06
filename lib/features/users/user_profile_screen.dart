@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tiktok_clone/constants/sizes.dart';
 
 class UserProfileScreen extends StatefulWidget {
   const UserProfileScreen({super.key});
@@ -17,13 +18,12 @@ class _UserProfileScreenState
       // sliverappbar는 스크롤을 내렸을 때 고정이 되지 않고 함께 딸려 올라간다. 굿 ~~~
       slivers: [
         SliverAppBar(
-          snap: true,
           pinned: true,
-          floating: true,
           stretch: true,
           backgroundColor: Colors.teal,
           elevation: 1,
           collapsedHeight: 80,
+
           expandedHeight: 200,
           flexibleSpace: FlexibleSpaceBar(
             stretchModes: [
@@ -38,52 +38,97 @@ class _UserProfileScreenState
             centerTitle: true,
           ),
         ),
-        // 스크롤 테스트를 위한 충분한 콘텐츠 추가
-        SliverToBoxAdapter(
-          child: Container(
-            padding: const EdgeInsets.all(16),
-            child: Column(
-              children: List.generate(
-                20, // 20개의 카드 생성
-                (index) => Container(
-                  margin: const EdgeInsets.only(bottom: 16),
-                  padding: const EdgeInsets.all(16),
-                  decoration: BoxDecoration(
-                    color: Colors.grey[200],
-                    borderRadius: BorderRadius.circular(12),
-                    border: Border.all(
-                      color: Colors.grey[300]!,
-                    ),
-                  ),
-                  child: Column(
-                    crossAxisAlignment:
-                        CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        "카드 ${index + 1}",
-                        style: const TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      const SizedBox(height: 8),
-                      Text(
-                        "이것은 스크롤 테스트를 위한 카드입니다. "
-                        "스크롤이 잘 작동하는지 확인해보세요! "
-                        "더 많은 콘텐츠가 있어야 스크롤이 가능합니다.",
-                        style: TextStyle(
-                          fontSize: 14,
-                          color: Colors.grey[600],
-                        ),
-                      ),
-                    ],
+        const SliverToBoxAdapter(
+          child: Column(
+            children: [
+              CircleAvatar(
+                backgroundColor: Colors.blue,
+                radius: Sizes.size20,
+              ),
+            ],
+          ),
+        ),
+        SliverFixedExtentList(
+          delegate: SliverChildBuilderDelegate(
+            (context, index) => Container(
+              decoration: BoxDecoration(
+                color: Colors.amber[100 * (index % 9 + 1)],
+              ),
+              child: Center(
+                child: Text(
+                  "아이템 ${index + 1}",
+                  style: const TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
                   ),
                 ),
               ),
             ),
+            childCount: 50, // 50개의 아이템 생성
           ),
+          itemExtent: 100,
+        ),
+        SliverPersistentHeader(
+          delegate: CustomDelegate(),
+          pinned: true,
+          floating: true,
+        ),
+        SliverGrid(
+          delegate: SliverChildBuilderDelegate(
+            childCount: 50,
+            (context, index) => Container(
+              color: Colors.blue[100 * (index % 9 + 1)],
+              child: const Align(
+                alignment: Alignment.center,
+                child: Text("Hello!"),
+              ),
+            ),
+          ),
+          gridDelegate:
+              const SliverGridDelegateWithMaxCrossAxisExtent(
+                maxCrossAxisExtent: 100,
+                mainAxisSpacing: Sizes.size20,
+                crossAxisSpacing: Sizes.size20,
+                childAspectRatio: 1,
+              ),
         ),
       ],
     );
+  }
+}
+
+class CustomDelegate
+    extends SliverPersistentHeaderDelegate {
+  @override
+  Widget build(
+    BuildContext context,
+    double shrinkOffset,
+    bool overlapsContent,
+  ) {
+    return Container(
+      color: Colors.indigo,
+      child: const FractionallySizedBox(
+        heightFactor: 1,
+        child: Center(
+          child: Text(
+            "Title!!!!!!!!!!!",
+            style: TextStyle(color: Colors.white),
+          ),
+        ),
+      ),
+    );
+  }
+
+  @override
+  double get maxExtent => 150;
+
+  @override
+  double get minExtent => 80;
+
+  @override
+  bool shouldRebuild(
+    covariant SliverPersistentHeaderDelegate oldDelegate,
+  ) {
+    return false;
   }
 }
