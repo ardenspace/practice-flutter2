@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:tiktok_clone/constants/gaps.dart';
@@ -35,6 +36,8 @@ class _VideoPostState extends State<VideoPost>
 
   bool _isViewMore = false;
 
+  bool _isMuted = false;
+
   void _onVideoChange() {
     if (_videoPlayerController.value.isInitialized) {
       if (_videoPlayerController.value.duration ==
@@ -50,6 +53,11 @@ class _VideoPostState extends State<VideoPost>
     );
     await _videoPlayerController.initialize();
     await _videoPlayerController.setLooping(true);
+
+    if (kIsWeb) {
+      await _videoPlayerController.setVolume(0);
+      _isMuted = true;
+    }
     _videoPlayerController.addListener(_onVideoChange);
     setState(() {});
   }
@@ -119,6 +127,18 @@ class _VideoPostState extends State<VideoPost>
       builder: (context) => const VideoComments(),
     );
     _onTogglePause();
+  }
+
+  void _onMuteTap() {
+    setState(() {
+      if (_isMuted) {
+        _videoPlayerController.setVolume(1);
+        _isMuted = false;
+      } else {
+        _videoPlayerController.setVolume(0);
+        _isMuted = true;
+      }
+    });
   }
 
   @override
@@ -219,6 +239,19 @@ class _VideoPostState extends State<VideoPost>
                   ],
                 ),
               ],
+            ),
+          ),
+          Positioned(
+            left: 20,
+            top: 20,
+            child: GestureDetector(
+              onTap: _onMuteTap,
+              child: VideoButton(
+                icon: _isMuted
+                    ? FontAwesomeIcons.volumeXmark
+                    : FontAwesomeIcons.volumeHigh,
+                text: _isMuted ? "Mute" : "Unmute",
+              ),
             ),
           ),
           Positioned(
