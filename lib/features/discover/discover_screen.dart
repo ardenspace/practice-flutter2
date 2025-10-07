@@ -69,67 +69,81 @@ class _DiscoverScreenState extends State<DiscoverScreen>
             resizeToAvoidBottomInset: false,
             appBar: AppBar(
               elevation: 1,
-              title: Expanded(
-                child: Row(
-                  children: [
-                    FaIcon(
-                      FontAwesomeIcons.arrowLeft,
-                      color: Colors.grey.shade900,
-                      size: 20,
-                    ),
-                    Gaps.h10,
-                    Expanded(
-                      child: TextField(
-                        controller: _textEditingController,
-                        onTap: _onStartWriting,
-                        minLines: null,
-                        maxLines: null,
-                        textInputAction:
-                            TextInputAction.newline,
-                        decoration: InputDecoration(
-                          hintText: "Add a comment...",
-                          border: const OutlineInputBorder(
-                            borderRadius: BorderRadius.all(
-                              Radius.circular(Sizes.size20),
-                            ),
-                            borderSide: BorderSide.none,
-                          ),
-                          filled: true,
-                          fillColor: Colors.grey.shade200,
-                          contentPadding:
-                              const EdgeInsets.symmetric(
-                                horizontal: Sizes.size16,
-                                vertical: Sizes.size8,
-                              ),
-                          suffix: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              if (_isWriting)
-                                GestureDetector(
-                                  onTap: () =>
-                                      _onDismissKeyboard(
-                                        context,
+              title: ConstrainedBox(
+                // ConstrainedBox는 단지 constraints를 받는 Container이다. 따라서 그냥 Container 써도 됨
+                // 이건 constraints는 물론 padding, decoration, border radius 등등 다 받을 수 있으므로 실용성 굿
+                constraints: const BoxConstraints(
+                  maxWidth: Breakpoints.sm,
+                ),
+                child: Expanded(
+                  child: Row(
+                    children: [
+                      FaIcon(
+                        FontAwesomeIcons.arrowLeft,
+                        color: Colors.grey.shade900,
+                        size: 20,
+                      ),
+                      Gaps.h10,
+                      Expanded(
+                        child: TextField(
+                          controller:
+                              _textEditingController,
+                          onTap: _onStartWriting,
+                          minLines: null,
+                          maxLines: null,
+                          textInputAction:
+                              TextInputAction.newline,
+                          decoration: InputDecoration(
+                            hintText: "Add a comment...",
+                            border:
+                                const OutlineInputBorder(
+                                  borderRadius:
+                                      BorderRadius.all(
+                                        Radius.circular(
+                                          Sizes.size20,
+                                        ),
                                       ),
-                                  child: FaIcon(
-                                    FontAwesomeIcons
-                                        .solidCircleXmark,
-                                    color: Colors
-                                        .grey
-                                        .shade500,
-                                  ),
+                                  borderSide:
+                                      BorderSide.none,
                                 ),
-                            ],
+                            filled: true,
+                            fillColor: Colors.grey.shade200,
+                            contentPadding:
+                                const EdgeInsets.symmetric(
+                                  horizontal: Sizes.size16,
+                                  vertical: Sizes.size8,
+                                ),
+                            suffix: Row(
+                              mainAxisSize:
+                                  MainAxisSize.min,
+                              children: [
+                                if (_isWriting)
+                                  GestureDetector(
+                                    onTap: () =>
+                                        _onDismissKeyboard(
+                                          context,
+                                        ),
+                                    child: FaIcon(
+                                      FontAwesomeIcons
+                                          .solidCircleXmark,
+                                      color: Colors
+                                          .grey
+                                          .shade500,
+                                    ),
+                                  ),
+                              ],
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                    Gaps.h10,
-                    FaIcon(
-                      FontAwesomeIcons.coins,
-                      color: Colors.grey.shade900,
-                      size: 20,
-                    ),
-                  ],
+                      Gaps.h10,
+                      FaIcon(
+                        FontAwesomeIcons.coins,
+                        color: Colors.grey.shade900,
+                        size: 20,
+                      ),
+                    ],
+                  ),
                 ),
               ),
               bottom: TabBar(
