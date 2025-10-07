@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:tiktok_clone/constants/breakpoints.dart';
 import 'package:tiktok_clone/constants/gaps.dart';
 import 'package:tiktok_clone/constants/sizes.dart';
 import 'package:tiktok_clone/features/settings/settings_screen.dart';
@@ -25,6 +26,8 @@ class _UserProfileScreenState
 
   @override
   Widget build(BuildContext context) {
+    final width = MediaQuery.of(context).size.width;
+
     return SafeArea(
       child: DefaultTabController(
         length: 2,
@@ -45,177 +48,433 @@ class _UserProfileScreenState
                 ],
               ),
               SliverToBoxAdapter(
-                child: Column(
-                  children: [
-                    const CircleAvatar(
-                      radius: 50,
-                      foregroundImage: NetworkImage(
-                        "assets/images/test-image4.jpg",
-                      ),
-                      child: Text("솜다리"),
-                    ),
-                    Gaps.v20,
-                    Row(
-                      mainAxisAlignment:
-                          MainAxisAlignment.center,
-                      children: [
-                        const Text(
-                          "@솜다리",
-                          style: TextStyle(
-                            fontWeight: FontWeight.w600,
-                            fontSize: Sizes.size18,
-                          ),
-                        ),
-                        Gaps.h5,
-                        FaIcon(
-                          FontAwesomeIcons.solidCircleCheck,
-                          size: Sizes.size16,
-                          color: Colors.blue.shade500,
-                        ),
-                      ],
-                    ),
-                    Gaps.v24,
-                    SizedBox(
-                      height: Sizes.size48,
-                      child: Row(
-                        mainAxisAlignment:
-                            MainAxisAlignment.center,
-                        children: [
-                          Column(
-                            children: [
-                              const Text(
-                                "97",
-                                style: TextStyle(
-                                  fontWeight:
-                                      FontWeight.bold,
-                                  fontSize: Sizes.size18,
+                child: LayoutBuilder(
+                  builder: (context, constraints) =>
+                      constraints.maxWidth > Breakpoints.md
+                      ? Column(
+                          children: [
+                            Row(
+                              mainAxisAlignment:
+                                  MainAxisAlignment.center,
+                              children: [
+                                const CircleAvatar(
+                                  radius: 50,
+                                  foregroundImage: NetworkImage(
+                                    "assets/images/test-image4.jpg",
+                                  ),
+                                  child: Text("솜다리"),
                                 ),
+                                Gaps.h32,
+                                Column(
+                                  children: [
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment
+                                              .center,
+                                      children: [
+                                        const Text(
+                                          "@솜다리",
+                                          style: TextStyle(
+                                            fontWeight:
+                                                FontWeight
+                                                    .w600,
+                                            fontSize: Sizes
+                                                .size18,
+                                          ),
+                                        ),
+                                        Gaps.h5,
+                                        FaIcon(
+                                          FontAwesomeIcons
+                                              .solidCircleCheck,
+                                          size:
+                                              Sizes.size16,
+                                          color: Colors
+                                              .blue
+                                              .shade500,
+                                        ),
+                                      ],
+                                    ),
+                                    Gaps.v10,
+                                    SizedBox(
+                                      height: Sizes.size48,
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment
+                                                .center,
+                                        children: [
+                                          Column(
+                                            children: [
+                                              const Text(
+                                                "97",
+                                                style: TextStyle(
+                                                  fontWeight:
+                                                      FontWeight
+                                                          .bold,
+                                                  fontSize:
+                                                      Sizes
+                                                          .size18,
+                                                ),
+                                              ),
+                                              Gaps.v1,
+                                              Text(
+                                                "Following",
+                                                style: TextStyle(
+                                                  color: Colors
+                                                      .grey
+                                                      .shade500,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                          VerticalDivider(
+                                            width: Sizes
+                                                .size32,
+                                            thickness:
+                                                Sizes.size1,
+                                            color: Colors
+                                                .grey
+                                                .shade400,
+                                            indent: Sizes
+                                                .size14,
+                                            endIndent: Sizes
+                                                .size14,
+                                          ),
+                                          Column(
+                                            children: [
+                                              const Text(
+                                                "10M",
+                                                style: TextStyle(
+                                                  fontWeight:
+                                                      FontWeight
+                                                          .bold,
+                                                  fontSize:
+                                                      Sizes
+                                                          .size18,
+                                                ),
+                                              ),
+                                              Gaps.v1,
+                                              Text(
+                                                "Followers",
+                                                style: TextStyle(
+                                                  color: Colors
+                                                      .grey
+                                                      .shade500,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                          VerticalDivider(
+                                            width: Sizes
+                                                .size32,
+                                            thickness:
+                                                Sizes.size1,
+                                            color: Colors
+                                                .grey
+                                                .shade400,
+                                            indent: Sizes
+                                                .size14,
+                                            endIndent: Sizes
+                                                .size14,
+                                          ),
+                                          Column(
+                                            children: [
+                                              const Text(
+                                                "194.3M",
+                                                style: TextStyle(
+                                                  fontWeight:
+                                                      FontWeight
+                                                          .bold,
+                                                  fontSize:
+                                                      Sizes
+                                                          .size18,
+                                                ),
+                                              ),
+                                              Gaps.v1,
+                                              Text(
+                                                "Likes",
+                                                style: TextStyle(
+                                                  color: Colors
+                                                      .grey
+                                                      .shade500,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    Gaps.v10,
+                                    Container(
+                                      padding:
+                                          const EdgeInsets.symmetric(
+                                            vertical:
+                                                Sizes.size5,
+                                            horizontal:
+                                                Sizes
+                                                    .size48,
+                                          ),
+                                      decoration: BoxDecoration(
+                                        color: Theme.of(
+                                          context,
+                                        ).primaryColor,
+                                        borderRadius:
+                                            const BorderRadius.all(
+                                              Radius.circular(
+                                                Sizes.size4,
+                                              ),
+                                            ),
+                                      ),
+                                      child: const Text(
+                                        'Follow',
+                                        style: TextStyle(
+                                          color:
+                                              Colors.white,
+                                          fontWeight:
+                                              FontWeight
+                                                  .w600,
+                                        ),
+                                        textAlign: TextAlign
+                                            .center,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                            const Column(
+                              children: [
+                                Gaps.v20,
+                                Padding(
+                                  padding:
+                                      EdgeInsets.symmetric(
+                                        horizontal:
+                                            Sizes.size32,
+                                      ),
+                                  child: Text(
+                                    "All highlights and where to watch live matches on FIFA+ I wonder how it would loook",
+                                    textAlign:
+                                        TextAlign.center,
+                                  ),
+                                ),
+                                Gaps.v5,
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment
+                                          .center,
+                                  children: [
+                                    FaIcon(
+                                      FontAwesomeIcons.link,
+                                      size: Sizes.size12,
+                                    ),
+                                    Gaps.h4,
+                                    Text(
+                                      "https://nomadcoders.co",
+                                      style: TextStyle(
+                                        fontWeight:
+                                            FontWeight.w600,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                Gaps.v20,
+                              ],
+                            ),
+                          ],
+                        )
+                      : Column(
+                          children: [
+                            const CircleAvatar(
+                              radius: 50,
+                              foregroundImage: NetworkImage(
+                                "assets/images/test-image4.jpg",
                               ),
-                              Gaps.v1,
-                              Text(
-                                "Following",
-                                style: TextStyle(
+                              child: Text("솜다리"),
+                            ),
+                            Gaps.v20,
+                            Row(
+                              mainAxisAlignment:
+                                  MainAxisAlignment.center,
+                              children: [
+                                const Text(
+                                  "@솜다리",
+                                  style: TextStyle(
+                                    fontWeight:
+                                        FontWeight.w600,
+                                    fontSize: Sizes.size18,
+                                  ),
+                                ),
+                                Gaps.h5,
+                                FaIcon(
+                                  FontAwesomeIcons
+                                      .solidCircleCheck,
+                                  size: Sizes.size16,
                                   color:
-                                      Colors.grey.shade500,
+                                      Colors.blue.shade500,
+                                ),
+                              ],
+                            ),
+                            Gaps.v24,
+                            SizedBox(
+                              height: Sizes.size48,
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment
+                                        .center,
+                                children: [
+                                  Column(
+                                    children: [
+                                      const Text(
+                                        "97",
+                                        style: TextStyle(
+                                          fontWeight:
+                                              FontWeight
+                                                  .bold,
+                                          fontSize:
+                                              Sizes.size18,
+                                        ),
+                                      ),
+                                      Gaps.v1,
+                                      Text(
+                                        "Following",
+                                        style: TextStyle(
+                                          color: Colors
+                                              .grey
+                                              .shade500,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  VerticalDivider(
+                                    width: Sizes.size32,
+                                    thickness: Sizes.size1,
+                                    color: Colors
+                                        .grey
+                                        .shade400,
+                                    indent: Sizes.size14,
+                                    endIndent: Sizes.size14,
+                                  ),
+                                  Column(
+                                    children: [
+                                      const Text(
+                                        "10M",
+                                        style: TextStyle(
+                                          fontWeight:
+                                              FontWeight
+                                                  .bold,
+                                          fontSize:
+                                              Sizes.size18,
+                                        ),
+                                      ),
+                                      Gaps.v1,
+                                      Text(
+                                        "Followers",
+                                        style: TextStyle(
+                                          color: Colors
+                                              .grey
+                                              .shade500,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  VerticalDivider(
+                                    width: Sizes.size32,
+                                    thickness: Sizes.size1,
+                                    color: Colors
+                                        .grey
+                                        .shade400,
+                                    indent: Sizes.size14,
+                                    endIndent: Sizes.size14,
+                                  ),
+                                  Column(
+                                    children: [
+                                      const Text(
+                                        "194.3M",
+                                        style: TextStyle(
+                                          fontWeight:
+                                              FontWeight
+                                                  .bold,
+                                          fontSize:
+                                              Sizes.size18,
+                                        ),
+                                      ),
+                                      Gaps.v1,
+                                      Text(
+                                        "Likes",
+                                        style: TextStyle(
+                                          color: Colors
+                                              .grey
+                                              .shade500,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Gaps.v14,
+                            FractionallySizedBox(
+                              widthFactor: 0.33,
+                              child: Container(
+                                padding:
+                                    const EdgeInsets.symmetric(
+                                      vertical:
+                                          Sizes.size12,
+                                    ),
+                                decoration: BoxDecoration(
+                                  color: Theme.of(
+                                    context,
+                                  ).primaryColor,
+                                  borderRadius:
+                                      const BorderRadius.all(
+                                        Radius.circular(
+                                          Sizes.size4,
+                                        ),
+                                      ),
+                                ),
+                                child: const Text(
+                                  'Follow',
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontWeight:
+                                        FontWeight.w600,
+                                  ),
+                                  textAlign:
+                                      TextAlign.center,
                                 ),
                               ),
-                            ],
-                          ),
-                          VerticalDivider(
-                            width: Sizes.size32,
-                            thickness: Sizes.size1,
-                            color: Colors.grey.shade400,
-                            indent: Sizes.size14,
-                            endIndent: Sizes.size14,
-                          ),
-                          Column(
-                            children: [
-                              const Text(
-                                "10M",
-                                style: TextStyle(
-                                  fontWeight:
-                                      FontWeight.bold,
-                                  fontSize: Sizes.size18,
-                                ),
+                            ),
+                            Gaps.v14,
+                            const Padding(
+                              padding: EdgeInsets.symmetric(
+                                horizontal: Sizes.size32,
                               ),
-                              Gaps.v1,
-                              Text(
-                                "Followers",
-                                style: TextStyle(
-                                  color:
-                                      Colors.grey.shade500,
-                                ),
+                              child: Text(
+                                "All highlights and where to watch live matches on FIFA+ I wonder how it would loook",
+                                textAlign: TextAlign.center,
                               ),
-                            ],
-                          ),
-                          VerticalDivider(
-                            width: Sizes.size32,
-                            thickness: Sizes.size1,
-                            color: Colors.grey.shade400,
-                            indent: Sizes.size14,
-                            endIndent: Sizes.size14,
-                          ),
-                          Column(
-                            children: [
-                              const Text(
-                                "194.3M",
-                                style: TextStyle(
-                                  fontWeight:
-                                      FontWeight.bold,
-                                  fontSize: Sizes.size18,
+                            ),
+                            Gaps.v14,
+                            const Row(
+                              mainAxisAlignment:
+                                  MainAxisAlignment.center,
+                              children: [
+                                FaIcon(
+                                  FontAwesomeIcons.link,
+                                  size: Sizes.size12,
                                 ),
-                              ),
-                              Gaps.v1,
-                              Text(
-                                "Likes",
-                                style: TextStyle(
-                                  color:
-                                      Colors.grey.shade500,
+                                Gaps.h4,
+                                Text(
+                                  "https://nomadcoders.co",
+                                  style: TextStyle(
+                                    fontWeight:
+                                        FontWeight.w600,
+                                  ),
                                 ),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
-                    Gaps.v14,
-                    FractionallySizedBox(
-                      widthFactor: 0.33,
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(
-                          vertical: Sizes.size12,
+                              ],
+                            ),
+                            Gaps.v20,
+                          ],
                         ),
-                        decoration: BoxDecoration(
-                          color: Theme.of(
-                            context,
-                          ).primaryColor,
-                          borderRadius:
-                              const BorderRadius.all(
-                                Radius.circular(
-                                  Sizes.size4,
-                                ),
-                              ),
-                        ),
-                        child: const Text(
-                          'Follow',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.w600,
-                          ),
-                          textAlign: TextAlign.center,
-                        ),
-                      ),
-                    ),
-                    Gaps.v14,
-                    const Padding(
-                      padding: EdgeInsets.symmetric(
-                        horizontal: Sizes.size32,
-                      ),
-                      child: Text(
-                        "All highlights and where to watch live matches on FIFA+ I wonder how it would loook",
-                        textAlign: TextAlign.center,
-                      ),
-                    ),
-                    Gaps.v14,
-                    const Row(
-                      mainAxisAlignment:
-                          MainAxisAlignment.center,
-                      children: [
-                        FaIcon(
-                          FontAwesomeIcons.link,
-                          size: Sizes.size12,
-                        ),
-                        Gaps.h4,
-                        Text(
-                          "https://nomadcoders.co",
-                          style: TextStyle(
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                      ],
-                    ),
-                    Gaps.v20,
-                  ],
                 ),
               ),
               SliverPersistentHeader(
@@ -230,8 +489,12 @@ class _UserProfileScreenState
                 itemCount: 20,
                 padding: EdgeInsets.zero,
                 gridDelegate:
-                    const SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 3,
+                    SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: width > Breakpoints.lg
+                          ? 5
+                          : width > Breakpoints.md
+                          ? 4
+                          : 3,
                       crossAxisSpacing: Sizes.size2,
                       mainAxisSpacing: Sizes.size2,
                       childAspectRatio: 9 / 14,
