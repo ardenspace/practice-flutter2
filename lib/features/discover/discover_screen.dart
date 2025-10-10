@@ -3,6 +3,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:tiktok_clone/constants/breakpoints.dart';
 import 'package:tiktok_clone/constants/gaps.dart';
 import 'package:tiktok_clone/constants/sizes.dart';
+import 'package:tiktok_clone/utils.dart';
 
 final tabs = [
   "Top",
@@ -80,7 +81,9 @@ class _DiscoverScreenState extends State<DiscoverScreen>
                     children: [
                       FaIcon(
                         FontAwesomeIcons.arrowLeft,
-                        color: Colors.grey.shade900,
+                        color: isDarkMode(context)
+                            ? Colors.grey.shade200
+                            : Colors.grey.shade900,
                         size: 20,
                       ),
                       Gaps.h10,
@@ -107,7 +110,9 @@ class _DiscoverScreenState extends State<DiscoverScreen>
                                       BorderSide.none,
                                 ),
                             filled: true,
-                            fillColor: Colors.grey.shade200,
+                            fillColor: isDarkMode(context)
+                                ? Colors.grey.shade800
+                                : Colors.grey.shade200,
                             contentPadding:
                                 const EdgeInsets.symmetric(
                                   horizontal: Sizes.size16,
@@ -139,7 +144,9 @@ class _DiscoverScreenState extends State<DiscoverScreen>
                       Gaps.h10,
                       FaIcon(
                         FontAwesomeIcons.coins,
-                        color: Colors.grey.shade900,
+                        color: isDarkMode(context)
+                            ? Colors.grey.shade200
+                            : Colors.grey.shade900,
                         size: 20,
                       ),
                     ],
@@ -158,9 +165,15 @@ class _DiscoverScreenState extends State<DiscoverScreen>
                   fontSize: Sizes.size16,
                 ),
                 indicatorSize: TabBarIndicatorSize.tab,
-                indicatorColor: Colors.black,
-                labelColor: Colors.black,
-                unselectedLabelColor: Colors.grey[500],
+                indicatorColor: Theme.of(
+                  context,
+                ).tabBarTheme.indicatorColor,
+                labelColor: Theme.of(
+                  context,
+                ).tabBarTheme.labelColor,
+                unselectedLabelColor: Theme.of(
+                  context,
+                ).tabBarTheme.unselectedLabelColor,
                 tabs: [
                   for (var tab in tabs) Tab(text: tab),
                 ],
@@ -225,7 +238,9 @@ class _DiscoverScreenState extends State<DiscoverScreen>
                             constraints.maxWidth > 250)
                           DefaultTextStyle(
                             style: TextStyle(
-                              color: Colors.grey[500],
+                              color: isDarkMode(context)
+                                  ? Colors.grey.shade200
+                                  : Colors.grey.shade500,
                               fontWeight: FontWeight.w600,
                             ),
                             child: Row(
