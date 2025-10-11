@@ -21,6 +21,9 @@ class TikTokApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Tictok clone',
       themeMode: ThemeMode.system,
+      // 근데 이런 themedata title을 뭐 어떻게 외워요?
+      // 그래서 나온 패키지가 있음
+      // flex_color_scheme / https://pub.dev/packages/flex_color_scheme
       theme: ThemeData(
         useMaterial3: true,
         brightness: Brightness.light,
