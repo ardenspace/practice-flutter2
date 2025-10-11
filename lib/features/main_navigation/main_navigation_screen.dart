@@ -19,7 +19,7 @@ class MainNavigationScreen extends StatefulWidget {
 
 class _MainNavigationScreenState
     extends State<MainNavigationScreen> {
-  int _selectedIndex = 1;
+  int _selectedIndex = 4;
   bool _isPostButtonPressed = false;
 
   void _onTap(int index) {
@@ -44,7 +44,7 @@ class _MainNavigationScreenState
     final isDark = isDarkMode(context);
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      backgroundColor: _selectedIndex == 0
+      backgroundColor: _selectedIndex == 0 || isDark
           ? Colors.black
           : Colors.white,
       body: Stack(

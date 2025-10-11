@@ -11,11 +11,19 @@ class SettingsScreen extends StatefulWidget {
 
 class _SettingsScreenState extends State<SettingsScreen> {
   bool _notification = false;
+  bool _checkboxValue = false;
 
   void _onNotificationsChanged(bool? newValue) {
     if (newValue == null) return;
     setState(() {
       _notification = newValue;
+    });
+  }
+
+  void _onCheckboxChanged(bool? newValue) {
+    if (newValue == null) return;
+    setState(() {
+      _checkboxValue = newValue;
     });
   }
 
@@ -27,14 +35,14 @@ class _SettingsScreenState extends State<SettingsScreen> {
         onChanged: _onNotificationsChanged,
         title: const Text("Enable notifications"),
       ),
-      CheckboxListTile(
-        value: _notification,
-        onChanged: _onNotificationsChanged,
-        title: const Text("Enable notifications"),
-        subtitle: const Text(
-          "Enable notifications - subtitle",
-        ),
-      ),
+      // CheckboxListTile(
+      //   value: _checkboxValue,
+      //   onChanged: _onCheckboxChanged,
+      //   title: const Text("Enable notifications"),
+      //   subtitle: const Text(
+      //     "Enable notifications - subtitle",
+      //   ),
+      // ),
       const ListTile(title: Text("What is your birthday?")),
       const ListTile(
         title: Text("Log out (IOS)"),
@@ -56,8 +64,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
           ),
           child: ListView.separated(
             itemCount: tiles.length,
-            itemBuilder: (context, index) => tiles[index],
-            separatorBuilder: (context, index) => Padding(
+            itemBuilder: (ctx, index) => tiles[index],
+            separatorBuilder: (ctx, index) => Padding(
               padding: const EdgeInsets.symmetric(
                 vertical: 8,
               ),

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:tiktok_clone/constants/gaps.dart';
 import 'package:tiktok_clone/constants/sizes.dart';
+import 'package:tiktok_clone/utils.dart';
 
 class ChatDetailScreen extends StatefulWidget {
   const ChatDetailScreen({super.key});
@@ -15,6 +16,7 @@ class _ChatDetailScreenState
     extends State<ChatDetailScreen> {
   @override
   Widget build(BuildContext context) {
+    final isDark = isDarkMode(context);
     return Scaffold(
       appBar: AppBar(
         title: ListTile(
@@ -130,7 +132,9 @@ class _ChatDetailScreenState
             bottom: 0,
             width: MediaQuery.of(context).size.width,
             child: Container(
-              color: Colors.grey.shade50,
+              color: isDark
+                  ? Colors.black
+                  : Colors.grey.shade50,
               padding: const EdgeInsets.symmetric(
                 horizontal: Sizes.size14,
                 vertical: Sizes.size20,
@@ -165,7 +169,9 @@ class _ChatDetailScreenState
                           borderSide: BorderSide.none,
                         ),
                         filled: true,
-                        fillColor: Colors.white,
+                        fillColor: isDark
+                            ? Colors.grey.shade800
+                            : Colors.white,
                       ),
                     ),
                   ),
@@ -178,11 +184,15 @@ class _ChatDetailScreenState
                       borderRadius: BorderRadius.circular(
                         Sizes.size48,
                       ),
-                      color: Colors.grey.shade300,
+                      color: isDark
+                          ? Colors.grey.shade500
+                          : Colors.grey.shade300,
                     ),
-                    child: const FaIcon(
+                    child: FaIcon(
                       FontAwesomeIcons.solidPaperPlane,
-                      color: Colors.white,
+                      color: isDark
+                          ? Colors.black
+                          : Colors.white,
                       size: Sizes.size20,
                     ),
                   ),
