@@ -115,7 +115,11 @@ class _TutorialScreenState extends State<TutorialScreen> {
             ),
           ),
         ),
-        bottomNavigationBar: BottomAppBar(
+        bottomNavigationBar: Container(
+          padding: const EdgeInsets.symmetric(
+            horizontal: Sizes.size24,
+            vertical: Sizes.size24,
+          ),
           color: isDarkMode(context)
               ? Colors.black
               : Colors.white,
