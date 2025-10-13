@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:tiktok_clone/constants/sizes.dart';
-import 'package:tiktok_clone/features/authentication/sign_up_screen.dart';
+import 'package:tiktok_clone/features/settings/settings_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -20,6 +21,16 @@ class TikTokApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Tictok clone',
+      localizationsDelegates: [
+        GlobalMaterialLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+      ],
+      supportedLocales: [
+        const Locale("en"),
+        const Locale("ko"),
+        const Locale("es"),
+      ],
       themeMode: ThemeMode.system,
       // 근데 이런 themedata title을 뭐 어떻게 외워요?
       // 그래서 나온 패키지가 있음
@@ -98,7 +109,7 @@ class TikTokApp extends StatelessWidget {
           elevation: 2,
         ),
       ),
-      home: const SignUpScreen(),
+      home: const SettingsScreen(),
     );
   }
 }
