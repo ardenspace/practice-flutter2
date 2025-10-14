@@ -9,5 +9,7 @@ class AppLocalizationsKo extends AppLocalizations {
   AppLocalizationsKo([String locale = 'ko']) : super(locale);
 
   @override
-  String get signUpTitle => '틱톡에 가입하기';
+  String signUpTitle(String nameOfTheApp) {
+    return '$nameOfTheApp에 가입하세요';
+  }
 }

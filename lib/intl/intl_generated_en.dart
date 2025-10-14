@@ -9,5 +9,7 @@ class AppLocalizationsEn extends AppLocalizations {
   AppLocalizationsEn([String locale = 'en']) : super(locale);
 
   @override
-  String get signUpTitle => 'Sign up for Tiktok';
+  String signUpTitle(String nameOfTheApp) {
+    return 'Sign up for $nameOfTheApp';
+  }
 }

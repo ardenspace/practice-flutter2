@@ -98,11 +98,11 @@ abstract class AppLocalizations {
     Locale('ko'),
   ];
 
-  /// No description provided for @signUpTitle.
+  /// The title people see when they open the app for the first time.
   ///
   /// In en, this message translates to:
-  /// **'Sign up for Tiktok'**
-  String get signUpTitle;
+  /// **'Sign up for {nameOfTheApp}'**
+  String signUpTitle(String nameOfTheApp);
 }
 
 class _AppLocalizationsDelegate
