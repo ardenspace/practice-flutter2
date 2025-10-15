@@ -22,14 +22,14 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static String m0(value) => "${value}";
 
-  static String m1(value) => "2276 comments";
+  static String m1(value) => "댓글 ${value}개";
 
   static String m2(value) => "${value}";
 
   static String m3(gender) =>
       "${Intl.gender(gender, female: '로그인 하세요', male: '로그인 하세요', other: '로그인')}";
 
-  static String m5(nameOfTheApp) => "${nameOfTheApp}에 가입하세요";
+  static String m5(nameOfTheApp, when) => "${nameOfTheApp}에 가입하세요 ${when}";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{

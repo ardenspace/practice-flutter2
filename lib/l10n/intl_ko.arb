@@ -1,5 +1,5 @@
 {
-  "signUpTitle": "{nameOfTheApp}에 가입하세요",
+  "signUpTitle": "{nameOfTheApp}에 가입하세요 {when}",
   "signUpSubtitle": "프로필을 만들고 친구와 소통하세요. 그리고 나만의 비디오를 만들어 보세요.",
   "emailPasswordButton": "Use email & password",
   "appleButton": "애플로 함께하기",
@@ -8,5 +8,5 @@
   "alreayAccount": "계정이 이미 있나요?",
   "likeCount": "{value}",
   "commentCount": "{value}",
-  "commentTitle": "2276 comments"
+  "commentTitle": "댓글 {value}개"
 }

@@ -54,13 +54,19 @@ class S {
     return Localizations.of<S>(context, S);
   }
 
-  /// `Sign up for {nameOfTheApp}`
-  String signUpTitle(String nameOfTheApp) {
+  /// `Sign up for {nameOfTheApp} {when}`
+  String signUpTitle(String nameOfTheApp, DateTime when) {
+    final DateFormat whenDateFormat = DateFormat(
+      'd MM yy',
+      Intl.getCurrentLocale(),
+    );
+    final String whenString = whenDateFormat.format(when);
+
     return Intl.message(
-      'Sign up for $nameOfTheApp',
+      'Sign up for $nameOfTheApp $whenString',
       name: 'signUpTitle',
       desc: 'The title people see when they open the app for the first time.',
-      args: [nameOfTheApp],
+      args: [nameOfTheApp, whenString],
     );
   }
 
@@ -154,7 +160,7 @@ class S {
     );
   }
 
-  /// `2276 comments`
+  /// `{value} comments`
   String commentTitle(int value) {
     final NumberFormat valueNumberFormat = NumberFormat.compact(
       locale: Intl.getCurrentLocale(),
@@ -162,7 +168,7 @@ class S {
     final String valueString = valueNumberFormat.format(value);
 
     return Intl.message(
-      '2276 comments',
+      '$valueString comments',
       name: 'commentTitle',
       desc: 'Comment count',
       args: [valueString],

@@ -22,7 +22,7 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static String m0(value) => "${value}";
 
-  static String m1(value) => "2276 comments";
+  static String m1(value) => "${value} comments";
 
   static String m2(value) => "${value}";
 
@@ -31,7 +31,7 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static String m4(nameOfTheApp) => "Log in to ${nameOfTheApp}";
 
-  static String m5(nameOfTheApp) => "Sign up for ${nameOfTheApp}";
+  static String m5(nameOfTheApp, when) => "Sign up for ${nameOfTheApp} ${when}";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
