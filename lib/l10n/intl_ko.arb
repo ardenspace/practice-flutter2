@@ -5,5 +5,8 @@
   "appleButton": "애플로 함께하기",
   "alreadyHaveAnAccount": "계정이 이미 있나요?",
   "logIn": "{gender, select, male{로그인 하세요} female{로그인 하세요} other{로그인}}",
-  "alreayAccount": "계정이 이미 있나요?"
+  "alreayAccount": "계정이 이미 있나요?",
+  "likeCount": "{value}",
+  "commentCount": "{value}",
+  "commentTitle": "2276 comments"
 }

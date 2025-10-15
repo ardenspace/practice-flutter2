@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:tiktok_clone/constants/sizes.dart';
-import 'package:tiktok_clone/features/authentication/sign_up_screen.dart';
+import 'package:tiktok_clone/features/main_navigation/main_navigation_screen.dart';
 import 'package:tiktok_clone/generated/l10n.dart';
 
 void main() async {
@@ -19,7 +19,9 @@ class TikTokApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    S.load(const Locale("ko")); // 와 이렇게 하니까 언어 설정이 싹 바뀜
+    // S.load(const Locale("en"));
+    S.load(const Locale("ko"));
+    // 와 이렇게 하니까 언어 설정이 싹 바뀜
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Tictok clone',
@@ -111,7 +113,7 @@ class TikTokApp extends StatelessWidget {
           elevation: 2,
         ),
       ),
-      home: const SignUpScreen(),
+      home: const MainNavigationScreen(),
     );
   }
 }

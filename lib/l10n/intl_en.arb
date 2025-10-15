@@ -31,5 +31,35 @@
         "type": "String"
       }
     }
+  },
+  "likeCount": "{value}",
+  "@likeCount": {
+    "description": "Like count",
+    "placeholders": {
+      "value": {
+        "type": "int",
+        "format": "compact"
+      }
+    }
+  },
+  "commentCount": "{value}",
+  "@commentCount": {
+    "description": "Comment count",
+    "placeholders": {
+      "value": {
+        "type": "int",
+        "format": "compact"
+      }
+    }
+  },
+  "commentTitle": "2276 comments",
+  "@commentTitle": {
+    "description": "Comment count",
+    "placeholders": {
+      "value": {
+        "type": "int",
+        "format": "compact"
+      }
+    }
   }
 }
