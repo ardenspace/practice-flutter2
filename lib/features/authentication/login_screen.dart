@@ -7,10 +7,11 @@ import 'package:tiktok_clone/features/authentication/widgets/login_form_screen.d
 import 'package:tiktok_clone/utils.dart';
 
 class LogInScreen extends StatelessWidget {
+  static String routeName = "/login";
   const LogInScreen({super.key});
 
   void onSignupTap(BuildContext context) {
-    Navigator.of(context).pop();
+    Navigator.of(context).pop("hello!");
   }
 
   void _onEmailLoginTop(BuildContext context) {

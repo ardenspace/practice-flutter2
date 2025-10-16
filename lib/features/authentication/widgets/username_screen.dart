@@ -4,15 +4,16 @@ import 'package:tiktok_clone/constants/sizes.dart';
 import 'package:tiktok_clone/features/authentication/widgets/email_screen.dart';
 import 'package:tiktok_clone/features/authentication/widgets/form_button.dart';
 
-class UserNamScreen extends StatefulWidget {
-  const UserNamScreen({super.key});
+class UserNameScreen extends StatefulWidget {
+  static String routeName = "/username";
+  const UserNameScreen({super.key});
 
   @override
-  State<UserNamScreen> createState() =>
-      _UserNamScreenState();
+  State<UserNameScreen> createState() =>
+      _UserNameScreenState();
 }
 
-class _UserNamScreenState extends State<UserNamScreen> {
+class _UserNameScreenState extends State<UserNameScreen> {
   final TextEditingController _usernameController =
       TextEditingController();
 

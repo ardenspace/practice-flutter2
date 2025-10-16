@@ -9,30 +9,59 @@ import 'package:tiktok_clone/generated/l10n.dart';
 import 'package:tiktok_clone/utils.dart';
 
 class SignUpScreen extends StatelessWidget {
+  static String routeName = "/";
   const SignUpScreen({super.key});
 
-  void onLoginTap(BuildContext context) {
-    Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (_) => const LogInScreen(),
-      ),
-    );
+  void onLoginTap(BuildContext context) async {
+    Navigator.of(context).pushNamed(LogInScreen.routeName);
   }
   // 뒤로 갈 페이지가 없는 signup 에서는 push를 써 뒤로 갈 페이지를 만들어주고
   // 로그인 페이지에서는 pop을 써 페이지가 쌓이지 않게 한다! 굿!
 
   void _onEmailTap(BuildContext context) {
-    Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (context) => const UserNamScreen(),
-      ),
-    );
+    Navigator.of(
+      context,
+    ).pushNamed(UserNameScreen.routeName);
+    // Navigator.of(context).push(
+    //   PageRouteBuilder(
+    //     transitionDuration: const Duration(seconds: 1),
+    //     reverseTransitionDuration: const Duration(
+    //       seconds: 1,
+    //     ),
+    //     pageBuilder:
+    //         (context, animation, secondaryAnimation) =>
+    //             const UserNamScreen(),
+    //     transitionsBuilder:
+    //         (
+    //           context,
+    //           animation,
+    //           secondaryAnimation,
+    //           child,
+    //         ) {
+    //           final offsetAnimation = Tween(
+    //             begin: const Offset(1, 0),
+    //             end: Offset.zero,
+    //           ).animate(animation);
+    //           final opacityAnimation = Tween(
+    //             begin: 0.5,
+    //             end: 1.0,
+    //           ).animate(animation);
+    //           return SlideTransition(
+    //             position: offsetAnimation,
+    //             child: FadeTransition(
+    //               opacity: opacityAnimation,
+    //               child: child,
+    //             ),
+    //           );
+    //         },
+    //   ),
+    // );
   }
 
   void _onPressUserName(BuildContext context) {
     Navigator.of(context).push(
       MaterialPageRoute(
-        builder: (context) => const UserNamScreen(),
+        builder: (context) => const UserNameScreen(),
       ),
     );
   }
@@ -86,18 +115,15 @@ class SignUpScreen extends StatelessWidget {
                     Gaps.v40,
                     if (orientation ==
                         Orientation.portrait) ...[
-                      GestureDetector(
-                        onTap: () => _onEmailTap(context),
-                        child: AuthButton(
-                          icon: const FaIcon(
-                            FontAwesomeIcons.user,
-                          ),
-                          text: S
-                              .of(context)
-                              .emailPasswordButton,
-                          onNavigate: () =>
-                              _onEmailTap(context),
+                      AuthButton(
+                        icon: const FaIcon(
+                          FontAwesomeIcons.user,
                         ),
+                        text: S
+                            .of(context)
+                            .emailPasswordButton,
+                        onNavigate: () =>
+                            _onEmailTap(context),
                       ),
                       Gaps.v16,
                       AuthButton(
@@ -114,18 +140,13 @@ class SignUpScreen extends StatelessWidget {
                       Row(
                         children: [
                           Expanded(
-                            child: GestureDetector(
-                              onTap: () =>
-                                  _onEmailTap(context),
-                              child: AuthButton(
-                                icon: const FaIcon(
-                                  FontAwesomeIcons.user,
-                                ),
-                                text:
-                                    "Use email & password",
-                                onNavigate: () =>
-                                    _onEmailTap(context),
+                            child: AuthButton(
+                              icon: const FaIcon(
+                                FontAwesomeIcons.user,
                               ),
+                              text: "Use email & password",
+                              onNavigate: () =>
+                                  _onEmailTap(context),
                             ),
                           ),
                           Gaps.h10,
