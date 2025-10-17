@@ -7,7 +7,12 @@ import 'package:tiktok_clone/features/settings/settings_screen.dart';
 import 'package:tiktok_clone/features/users/persistent_tab_bar.dart';
 
 class UserProfileScreen extends StatefulWidget {
-  const UserProfileScreen({super.key});
+  final String username;
+
+  const UserProfileScreen({
+    super.key,
+    required this.username,
+  });
 
   @override
   State<UserProfileScreen> createState() =>
@@ -39,7 +44,7 @@ class _UserProfileScreenState
             headerSliverBuilder: (context, innerBoxIsScrolled) {
               return [
                 SliverAppBar(
-                  title: const Text('솜다리'),
+                  title: Text(widget.username),
                   centerTitle: true,
                   actions: [
                     IconButton(
@@ -64,12 +69,15 @@ class _UserProfileScreenState
                                     MainAxisAlignment
                                         .center,
                                 children: [
-                                  const CircleAvatar(
+                                  CircleAvatar(
                                     radius: 50,
-                                    foregroundImage: AssetImage(
-                                      "assets/images/test-image4.jpg",
+                                    foregroundImage:
+                                        const AssetImage(
+                                          "assets/images/test-image4.jpg",
+                                        ),
+                                    child: Text(
+                                      widget.username,
                                     ),
-                                    child: Text("솜다리"),
                                   ),
                                   Gaps.h32,
                                   Column(
@@ -79,9 +87,9 @@ class _UserProfileScreenState
                                             MainAxisAlignment
                                                 .center,
                                         children: [
-                                          const Text(
-                                            "@솜다리",
-                                            style: TextStyle(
+                                          Text(
+                                            "@${widget.username}",
+                                            style: const TextStyle(
                                               fontWeight:
                                                   FontWeight
                                                       .w600,

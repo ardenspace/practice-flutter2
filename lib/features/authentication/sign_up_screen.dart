@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:go_router/go_router.dart';
 import 'package:tiktok_clone/constants/gaps.dart';
 import 'package:tiktok_clone/constants/sizes.dart';
 import 'package:tiktok_clone/features/authentication/login_screen.dart';
@@ -13,49 +14,13 @@ class SignUpScreen extends StatelessWidget {
   const SignUpScreen({super.key});
 
   void onLoginTap(BuildContext context) async {
-    Navigator.of(context).pushNamed(LogInScreen.routeName);
+    context.push(LogInScreen.routeName);
   }
   // 뒤로 갈 페이지가 없는 signup 에서는 push를 써 뒤로 갈 페이지를 만들어주고
   // 로그인 페이지에서는 pop을 써 페이지가 쌓이지 않게 한다! 굿!
 
   void _onEmailTap(BuildContext context) {
-    Navigator.of(
-      context,
-    ).pushNamed(UserNameScreen.routeName);
-    // Navigator.of(context).push(
-    //   PageRouteBuilder(
-    //     transitionDuration: const Duration(seconds: 1),
-    //     reverseTransitionDuration: const Duration(
-    //       seconds: 1,
-    //     ),
-    //     pageBuilder:
-    //         (context, animation, secondaryAnimation) =>
-    //             const UserNamScreen(),
-    //     transitionsBuilder:
-    //         (
-    //           context,
-    //           animation,
-    //           secondaryAnimation,
-    //           child,
-    //         ) {
-    //           final offsetAnimation = Tween(
-    //             begin: const Offset(1, 0),
-    //             end: Offset.zero,
-    //           ).animate(animation);
-    //           final opacityAnimation = Tween(
-    //             begin: 0.5,
-    //             end: 1.0,
-    //           ).animate(animation);
-    //           return SlideTransition(
-    //             position: offsetAnimation,
-    //             child: FadeTransition(
-    //               opacity: opacityAnimation,
-    //               child: child,
-    //             ),
-    //           );
-    //         },
-    //   ),
-    // );
+    context.push(UserNameScreen.routeName);
   }
 
   void _onPressUserName(BuildContext context) {

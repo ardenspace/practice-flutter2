@@ -63,7 +63,7 @@ class _MainNavigationScreenState
           ),
           Offstage(
             offstage: _selectedIndex != 4,
-            child: const UserProfileScreen(),
+            child: const UserProfileScreen(username: ""),
           ),
         ],
       ),
