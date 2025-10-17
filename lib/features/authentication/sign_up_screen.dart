@@ -10,7 +10,8 @@ import 'package:tiktok_clone/generated/l10n.dart';
 import 'package:tiktok_clone/utils.dart';
 
 class SignUpScreen extends StatelessWidget {
-  static String routeName = "/";
+  static const routeURL = "/";
+  static const routeName = "signUp";
   const SignUpScreen({super.key});
 
   void onLoginTap(BuildContext context) async {
@@ -20,21 +21,15 @@ class SignUpScreen extends StatelessWidget {
   // 로그인 페이지에서는 pop을 써 페이지가 쌓이지 않게 한다! 굿!
 
   void _onEmailTap(BuildContext context) {
-    context.push("/users/somda?show=likes");
+    context.pushNamed(UserNameScreen.routerName);
   }
 
   void _onPressUserName(BuildContext context) {
-    Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (context) => const UserNameScreen(),
-      ),
-    );
+    context.pushNamed(UserNameScreen.routerName);
   }
 
   @override
   Widget build(BuildContext context) {
-    print(Localizations.localeOf(context).languageCode);
-
     return OrientationBuilder(
       builder: (context, orientation) {
         // if (orientation == Orientation.landscape) {
