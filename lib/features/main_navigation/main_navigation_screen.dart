@@ -63,7 +63,10 @@ class _MainNavigationScreenState
           ),
           Offstage(
             offstage: _selectedIndex != 4,
-            child: const UserProfileScreen(username: ""),
+            child: const UserProfileScreen(
+              username: "somda",
+              tab: "",
+            ),
           ),
         ],
       ),

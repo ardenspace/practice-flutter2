@@ -20,7 +20,7 @@ class SignUpScreen extends StatelessWidget {
   // 로그인 페이지에서는 pop을 써 페이지가 쌓이지 않게 한다! 굿!
 
   void _onEmailTap(BuildContext context) {
-    context.push(UserNameScreen.routeName);
+    context.push("/users/somda?show=likes");
   }
 
   void _onPressUserName(BuildContext context) {
