@@ -21,18 +21,18 @@ packages:
     dependency: "direct main"
     description:
       name: camera
-      sha256: e7ac55af24a890d20276821eb3c95857074d03b7de6f9892b99a205ee30bd179
+      sha256: d6ec2cbdbe2fa8f5e0d07d8c06368fe4effa985a4a5ddade9cc58a8cd849557d
       url: "https://pub.dev"
     source: hosted
-    version: "0.10.3"
-  camera_android:
+    version: "0.11.2"
+  camera_android_camerax:
     dependency: transitive
     description:
-      name: camera_android
-      sha256: "4db8a27da163130d913ab4360297549ead1c7f9a6a88e71c44e5f4d10081a3d4"
+      name: camera_android_camerax
+      sha256: "58b8fe843a3c83fd1273c00cb35f5a8ae507f6cc9b2029bcf7e2abba499e28d8"
       url: "https://pub.dev"
     source: hosted
-    version: "0.10.10+6"
+    version: "0.6.19+1"
   camera_avfoundation:
     dependency: transitive
     description:
@@ -169,26 +169,26 @@ packages:
     dependency: "direct main"
     description:
       name: font_awesome_flutter
-      sha256: "875dbb9ec1ad30d68102019ceb682760d06c72747c1c5b7885781b95f88569cc"
+      sha256: b738e35f8bb4957896c34957baf922f99c5d415b38ddc8b070d14b7fa95715d4
       url: "https://pub.dev"
     source: hosted
-    version: "10.3.0"
+    version: "10.9.1"
   go_router:
     dependency: "direct main"
     description:
       name: go_router
-      sha256: b789ead597d3e9cd5d114cdb7af12440712da5599743f9a2358c43aa3f5e9d3e
+      sha256: f02fd7d2a4dc512fec615529824fdd217fecb3a3d3de68360293a551f21634b3
       url: "https://pub.dev"
     source: hosted
-    version: "6.0.2"
+    version: "14.8.1"
   google_fonts:
     dependency: "direct main"
     description:
       name: google_fonts
-      sha256: "148c716f5929371d335d29c2952119b34842b1a8e5607e37bb9f68f96e88068a"
+      sha256: "517b20870220c48752eafa0ba1a797a092fb22df0d89535fd9991e86ee2cdd9c"
       url: "https://pub.dev"
     source: hosted
-    version: "4.0.1"
+    version: "6.3.2"
   html:
     dependency: transitive
     description:
@@ -201,10 +201,10 @@ packages:
     dependency: transitive
     description:
       name: http
-      sha256: "5895291c13fa8a3bd82e76d5627f69e0d85ca6a30dcac95c4ea19a5d555879c2"
+      sha256: bb2ce4590bc2667c96f318d68cac1b5a7987ec819351d32b1c987239a815e007
       url: "https://pub.dev"
     source: hosted
-    version: "0.13.6"
+    version: "1.5.0"
   http_parser:
     dependency: transitive
     description:
@@ -345,42 +345,50 @@ packages:
     dependency: "direct main"
     description:
       name: permission_handler
-      sha256: bc56bfe9d3f44c3c612d8d393bd9b174eb796d706759f9b495ac254e4294baa5
+      sha256: "59adad729136f01ea9e35a48f5d1395e25cba6cea552249ddbe9cf950f5d7849"
       url: "https://pub.dev"
     source: hosted
-    version: "10.4.5"
+    version: "11.4.0"
   permission_handler_android:
     dependency: transitive
     description:
       name: permission_handler_android
-      sha256: "59c6322171c29df93a22d150ad95f3aa19ed86542eaec409ab2691b8f35f9a47"
+      sha256: d3971dcdd76182a0c198c096b5db2f0884b0d4196723d21a866fc4cdea057ebc
       url: "https://pub.dev"
     source: hosted
-    version: "10.3.6"
+    version: "12.1.0"
   permission_handler_apple:
     dependency: transitive
     description:
       name: permission_handler_apple
-      sha256: "99e220bce3f8877c78e4ace901082fb29fa1b4ebde529ad0932d8d664b34f3f5"
+      sha256: f000131e755c54cf4d84a5d8bd6e4149e262cc31c5a8b1d698de1ac85fa41023
       url: "https://pub.dev"
     source: hosted
-    version: "9.1.4"
+    version: "9.4.7"
+  permission_handler_html:
+    dependency: transitive
+    description:
+      name: permission_handler_html
+      sha256: "38f000e83355abb3392140f6bc3030660cfaef189e1f87824facb76300b4ff24"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.1.3+5"
   permission_handler_platform_interface:
     dependency: transitive
     description:
       name: permission_handler_platform_interface
-      sha256: "6760eb5ef34589224771010805bea6054ad28453906936f843a8cc4d3a55c4a4"
+      sha256: eb99b295153abce5d683cac8c02e22faab63e50679b937fa1bf67d58bb282878
       url: "https://pub.dev"
     source: hosted
-    version: "3.12.0"
+    version: "4.3.0"
   permission_handler_windows:
     dependency: transitive
     description:
       name: permission_handler_windows
-      sha256: cc074aace208760f1eee6aa4fae766b45d947df85bc831cde77009cdb4720098
+      sha256: "1a790728016f79a41216d88672dbc5df30e686e811ad4e698bfc51f76ad91f1e"
       url: "https://pub.dev"
     source: hosted
-    version: "0.1.3"
+    version: "0.2.1"
   platform:
     dependency: transitive
     description:
@@ -397,14 +405,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.1.8"
-  quiver:
-    dependency: transitive
-    description:
-      name: quiver
-      sha256: ea0b925899e64ecdfbf9c7becb60d5b50e706ade44a85b2363be2a22d88117d2
-      url: "https://pub.dev"
-    source: hosted
-    version: "3.2.2"
   sky_engine:
     dependency: transitive
     description: flutter
@@ -486,10 +486,10 @@ packages:
     dependency: "direct main"
     description:
       name: video_player
-      sha256: "86b4fb9e30613ef4ff7e47367bfec4b080ab17205b7d969cd12bbebde49476b1"
+      sha256: "0d55b1f1a31e5ad4c4967bfaa8ade0240b07d20ee4af1dfef5f531056512961a"
       url: "https://pub.dev"
     source: hosted
-    version: "2.4.10"
+    version: "2.10.0"
   video_player_android:
     dependency: transitive
     description:
@@ -526,10 +526,10 @@ packages:
     dependency: "direct main"
     description:
       name: visibility_detector
-      sha256: "15c54a459ec2c17b4705450483f3d5a2858e733aee893dcee9d75fd04814940d"
+      sha256: dd5cc11e13494f432d15939c3aa8ae76844c42b723398643ce9addb88a5ed420
       url: "https://pub.dev"
     source: hosted
-    version: "0.3.3"
+    version: "0.4.0+2"
   vm_service:
     dependency: transitive
     description:
