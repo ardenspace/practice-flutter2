@@ -1,5 +1,6 @@
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -19,8 +20,10 @@ class _VideoRecordingScreenState
     extends State<VideoRecordingScreen>
     with TickerProviderStateMixin, WidgetsBindingObserver {
   bool _hasPermission = false;
-
   bool _isSelfieMode = false;
+  double _currentZoom = 1.0;
+  double _minZoom = 1.0;
+  double _maxZoom = 1.0;
 
   late final AnimationController
   _buttonAnimationController = AnimationController(
@@ -58,10 +61,19 @@ class _VideoRecordingScreenState
     );
 
     await _cameraController.initialize();
-
     await _cameraController.prepareForVideoRecording();
+    await _cameraController.lockCaptureOrientation(
+      DeviceOrientation.portraitUp,
+    );
+
+    _minZoom = await _cameraController.getMinZoomLevel();
+    _maxZoom = await _cameraController.getMaxZoomLevel();
+
+    _currentZoom = _minZoom;
+    await _cameraController.setZoomLevel(_currentZoom);
 
     _flashMode = _cameraController.value.flashMode;
+    setState(() {});
   }
 
   Future<void> initPermissions() async {
@@ -166,6 +178,20 @@ class _VideoRecordingScreenState
     _buttonAnimationController.dispose();
     _cameraController.dispose();
     super.dispose();
+  }
+
+  Future<void> _onZoomUpdate(
+    DragUpdateDetails details,
+  ) async {
+    double newZoom = _currentZoom - details.delta.dy * 0.01;
+
+    // 범위 제한
+    newZoom = newZoom.clamp(_minZoom, _maxZoom);
+    await _cameraController.setZoomLevel(newZoom);
+
+    setState(() {
+      _currentZoom = newZoom;
+    });
   }
 
   Future<void> _onPickVideoPressed() async {
@@ -289,6 +315,7 @@ class _VideoRecordingScreenState
                       children: [
                         const Spacer(),
                         GestureDetector(
+                          onPanUpdate: _onZoomUpdate,
                           onTapDown: _starRecording,
                           onTapUp: (details) =>
                               _stopRecording(),
