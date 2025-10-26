@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:provider/provider.dart';
 import 'package:tiktok_clone/common/widgets/video_config/video_config_changeNotifier.dart';
 import 'package:tiktok_clone/common/widgets/video_config/video_valueNotifier.dart';
 import 'package:tiktok_clone/constants/gaps.dart';
@@ -58,23 +59,10 @@ class _VideoPostState extends State<VideoPost>
 
     if (kIsWeb) {
       await _videoPlayerController.setVolume(0);
-    } else {
-      // videoValueNotifier 값에 따라 초기 볼륨 설정
-      await _videoPlayerController.setVolume(
-        videoValueNotifier.value ? 0 : 1,
-      );
     }
+    // Provider 값은 didChangeDependencies에서 설정
     _videoPlayerController.addListener(_onVideoChange);
     setState(() {});
-  }
-
-  void _onVideoConfigChanged() {
-    // settings에서 mute 토글 시 현재 비디오 볼륨도 즉시 변경
-    if (_videoPlayerController.value.isInitialized) {
-      _videoPlayerController.setVolume(
-        videoConfigChangenotifier.autoMute ? 0 : 1,
-      );
-    }
   }
 
   void _onVideoValueChanged() {
@@ -87,6 +75,18 @@ class _VideoPostState extends State<VideoPost>
     setState(() {
       _autoMute = videoValueNotifier.value;
     });
+  }
+
+  void _onProviderChanged() {
+    // Provider isMuted 변경 시 비디오 볼륨 변경
+    if (mounted &&
+        _videoPlayerController.value.isInitialized) {
+      final config = context
+          .read<VideoConfigChangenotifier>();
+      _videoPlayerController.setVolume(
+        config.isMuted ? 0 : 1,
+      );
+    }
   }
 
   @override
@@ -104,11 +104,6 @@ class _VideoPostState extends State<VideoPost>
       duration: _animataionDuration,
     );
 
-    // videoConfigChangenotifier 변경사항 리스닝
-    videoConfigChangenotifier.addListener(
-      _onVideoConfigChanged,
-    );
-
     // videoValueNotifier 변경사항 리스닝
     videoValueNotifier.addListener(_onVideoValueChanged);
   }
@@ -120,12 +115,31 @@ class _VideoPostState extends State<VideoPost>
   // 4. build()               context 있고 InheritedWidget 접근 ✅
 
   @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    // Provider 리스너 추가
+    context.read<VideoConfigChangenotifier>().addListener(
+      _onProviderChanged,
+    );
+
+    // 초기 볼륨 설정
+    if (_videoPlayerController.value.isInitialized &&
+        !kIsWeb) {
+      final config = context
+          .read<VideoConfigChangenotifier>();
+      _videoPlayerController.setVolume(
+        config.isMuted ? 0 : 1,
+      );
+    }
+  }
+
+  @override
   void dispose() {
     _videoPlayerController.dispose();
-    videoConfigChangenotifier.removeListener(
-      _onVideoConfigChanged,
-    );
     videoValueNotifier.removeListener(_onVideoValueChanged);
+    context
+        .read<VideoConfigChangenotifier>()
+        .removeListener(_onProviderChanged);
     super.dispose();
   }
 
@@ -175,12 +189,12 @@ class _VideoPostState extends State<VideoPost>
   }
 
   void _onMuteTap() {
-    videoConfigChangenotifier.toggleAutoMute();
-    if (videoConfigChangenotifier.autoMute) {
-      _videoPlayerController.setVolume(0);
-    } else {
-      _videoPlayerController.setVolume(1);
-    }
+    // videoConfigChangenotifier.toggleAutoMute();
+    // if (videoConfigChangenotifier.autoMute) {
+    //   _videoPlayerController.setVolume(0);
+    // } else {
+    //   _videoPlayerController.setVolume(1);
+    // }
     // VideoConfigData.of(context).toggelMuted();
     // if (VideoConfigData.of(context).autoMute) {
     //   _videoPlayerController.setVolume(0);
@@ -302,23 +316,21 @@ class _VideoPostState extends State<VideoPost>
           ),
           Positioned(
             left: 20,
-            top: 20,
-            child: GestureDetector(
-              onTap: () {
-                videoValueNotifier.value =
-                    !videoValueNotifier.value;
-              },
-              child: AnimatedBuilder(
-                animation: videoValueNotifier,
-                builder: (context, child) => VideoButton(
-                  icon: videoValueNotifier.value
-                      ? FontAwesomeIcons.volumeXmark
-                      : FontAwesomeIcons.volumeHigh,
-                  text: videoValueNotifier.value
-                      ? "Mute"
-                      : "Unmute",
-                ),
+            top: 40,
+            child: IconButton(
+              icon: FaIcon(
+                context
+                        .watch<VideoConfigChangenotifier>()
+                        .isMuted
+                    ? FontAwesomeIcons.volumeOff
+                    : FontAwesomeIcons.volumeHigh,
+                color: Colors.white,
               ),
+              onPressed: () {
+                context
+                    .read<VideoConfigChangenotifier>()
+                    .toggleIsMuted();
+              },
             ),
           ),
           Positioned(

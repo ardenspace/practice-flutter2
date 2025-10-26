@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:tiktok_clone/common/widgets/video_config/darkmode_valueNotifier.dart';
-import 'package:tiktok_clone/common/widgets/video_config/video_valueNotifier.dart';
+import 'package:tiktok_clone/common/widgets/video_config/video_config_changeNotifier.dart';
 import 'package:tiktok_clone/constants/breakpoints.dart';
 
 class SettingsScreen extends StatefulWidget {
@@ -38,19 +39,15 @@ class _SettingsScreenState extends State<SettingsScreen> {
       // 그럼 어떻게 업데이트를 감지하는가? 그때 쓰이는 게 AnimatedBuilder...
       // 진짜 이상함 근데 공식문서에서는 둘을 같이 쓰라고 말하고 있음...
       // 근데 좋은 건 딱 이 부분만 리렌더링이 된다는 것
-      AnimatedBuilder(
-        animation: videoValueNotifier,
-        builder: (context, child) => SwitchListTile(
-          value: videoValueNotifier.value,
-          onChanged: (value) {
-            videoValueNotifier.value =
-                !videoValueNotifier.value;
-          },
-          title: const Text("Auto Mute"),
-          subtitle: const Text(
-            "Videos will be muted by default",
-          ),
-        ),
+      SwitchListTile.adaptive(
+        value: context
+            .watch<VideoConfigChangenotifier>()
+            .isMuted,
+        onChanged: (value) => context
+            .read<VideoConfigChangenotifier>()
+            .toggleIsMuted(),
+        title: const Text("Aute Mute"),
+        subtitle: const Text("Videos muted by default."),
       ),
       AnimatedBuilder(
         animation: darkmodeValueNotifier,
