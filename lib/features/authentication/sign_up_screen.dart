@@ -15,17 +15,31 @@ class SignUpScreen extends StatelessWidget {
   const SignUpScreen({super.key});
 
   void onLoginTap(BuildContext context) async {
-    context.push(LogInScreen.routeName);
+    context.pushNamed(LogInScreen.routeName);
   }
   // 뒤로 갈 페이지가 없는 signup 에서는 push를 써 뒤로 갈 페이지를 만들어주고
   // 로그인 페이지에서는 pop을 써 페이지가 쌓이지 않게 한다! 굿!
 
   void _onEmailTap(BuildContext context) {
-    context.pushNamed(UserNameScreen.routerName);
+    // context.pushNamed(UserNameScreen.routerName);
+    // 👆 위와 같이 하지 않고 아래처럼 하는 이유는
+    // Navigator.push는 url을 바꾸지 않고 사용자가 보는 화면만 바꿔 주기 때문에
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => const UserNameScreen(),
+      ),
+    );
   }
 
   void _onPressUserName(BuildContext context) {
-    context.pushNamed(UserNameScreen.routerName);
+    // context.pushNamed(UserNameScreen.routerName);
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => const UserNameScreen(),
+      ),
+    );
   }
 
   @override

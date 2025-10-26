@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:tiktok_clone/constants/gaps.dart';
 import 'package:tiktok_clone/constants/sizes.dart';
 import 'package:tiktok_clone/features/authentication/widgets/form_button.dart';
@@ -22,16 +23,17 @@ class _LoginFormScreenState extends State<LoginFormScreen> {
     if (_formKey.currentState != null) {
       if (_formKey.currentState!.validate()) {
         _formKey.currentState!.save();
-        Navigator.of(context).pushAndRemoveUntil(
-          // navigate.reset 같은 것임 ...
-          MaterialPageRoute(
-            builder: (context) => const InterestsScreen(),
-          ),
-          (route) {
-            print(route);
-            return false;
-          },
-        );
+        // Navigator.of(context).pushAndRemoveUntil(
+        //   // navigate.reset 같은 것임 ...
+        //   MaterialPageRoute(
+        //     builder: (context) => const InterestsScreen(),
+        //   ),
+        //   (route) {
+        //     print(route);
+        //     return false;
+        //   },
+        // );
+        context.goNamed(InterestsScreen.routeName);
       }
     }
   }

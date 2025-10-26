@@ -21,8 +21,7 @@ class TikTokApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // S.load(const Locale("en"));
-    S.load(const Locale("ko"));
+    S.load(const Locale("en"));
     // 와 이렇게 하니까 언어 설정이 싹 바뀜
     return MaterialApp.router(
       routerConfig: router,
