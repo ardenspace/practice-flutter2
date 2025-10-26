@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tiktok_clone/common/widgets/video_config/video_config.dart';
 import 'package:tiktok_clone/constants/breakpoints.dart';
 
 class SettingsScreen extends StatefulWidget {
@@ -22,6 +23,15 @@ class _SettingsScreenState extends State<SettingsScreen> {
   @override
   Widget build(BuildContext context) {
     final tiles = [
+      SwitchListTile(
+        value: VideoConfigData.of(context).autoMute,
+        onChanged: (value) =>
+            VideoConfigData.of(context).toggelMuted(),
+        title: const Text("Auto Mute"),
+        subtitle: const Text(
+          "Videos will be muted by default",
+        ),
+      ),
       SwitchListTile(
         value: _notification,
         onChanged: _onNotificationsChanged,

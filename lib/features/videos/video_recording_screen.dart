@@ -80,6 +80,8 @@ class _VideoRecordingScreenState
     await _cameraController.setZoomLevel(_currentZoom);
 
     _flashMode = _cameraController.value.flashMode;
+
+    if (!mounted) return;
     setState(() {});
   }
 
@@ -100,6 +102,7 @@ class _VideoRecordingScreenState
     if (!cameraDenied && !micDenied) {
       _hasPermission = true;
       await initCamera();
+      if (!mounted) return;
       setState(() {});
     }
   }
@@ -129,12 +132,14 @@ class _VideoRecordingScreenState
   Future<void> _toggleSelfieMode() async {
     _isSelfieMode = !_isSelfieMode;
     await initCamera();
+    if (!mounted) return;
     setState(() {});
   }
 
   Future<void> _setFlashMode(FlashMode newFlashMode) async {
     await _cameraController.setFlashMode(newFlashMode);
     _flashMode = newFlashMode;
+    if (!mounted) return;
     setState(() {});
   }
 
@@ -179,6 +184,7 @@ class _VideoRecordingScreenState
       _cameraController.dispose();
     } else if (state == AppLifecycleState.resumed) {
       await initCamera();
+      if (!mounted) return;
       setState(() {});
     }
   }
@@ -200,6 +206,7 @@ class _VideoRecordingScreenState
     newZoom = newZoom.clamp(_minZoom, _maxZoom);
     await _cameraController.setZoomLevel(newZoom);
 
+    if (!mounted) return;
     setState(() {
       _currentZoom = newZoom;
     });

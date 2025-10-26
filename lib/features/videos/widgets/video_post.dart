@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:tiktok_clone/common/widgets/video_config/video_config.dart';
 import 'package:tiktok_clone/constants/gaps.dart';
 import 'package:tiktok_clone/constants/sizes.dart';
 import 'package:tiktok_clone/features/videos/widgets/video_button.dart';
@@ -37,7 +38,7 @@ class _VideoPostState extends State<VideoPost>
 
   bool _isViewMore = false;
 
-  bool _isMuted = false;
+  late bool _isMuted;
 
   void _onVideoChange() {
     if (_videoPlayerController.value.isInitialized) {
@@ -77,6 +78,18 @@ class _VideoPostState extends State<VideoPost>
       value: 1.5,
       duration: _animataionDuration,
     );
+  }
+
+  // 부연 설명
+  // 1. constructor()          context 없음
+  // 2. initState()           context 있지만 InheritedWidget 접근 ❌
+  // 3. didChangeDependencies() context 있고 InheritedWidget 접근 ✅ 👈
+  // 4. build()               context 있고 InheritedWidget 접근 ✅
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    // VideoConfig의 autoMute 값으로 초기화
+    _isMuted = VideoConfigData.of(context).autoMute;
   }
 
   @override
@@ -131,15 +144,23 @@ class _VideoPostState extends State<VideoPost>
   }
 
   void _onMuteTap() {
-    setState(() {
-      if (_isMuted) {
-        _videoPlayerController.setVolume(1);
-        _isMuted = false;
-      } else {
-        _videoPlayerController.setVolume(0);
-        _isMuted = true;
-      }
-    });
+    VideoConfigData.of(context).toggelMuted();
+    if (VideoConfigData.of(context).autoMute) {
+      _videoPlayerController.setVolume(0);
+      _isMuted = true;
+    } else {
+      _videoPlayerController.setVolume(1);
+      _isMuted = false;
+    }
+    // setState(() {
+    //   if (_isMuted) {
+    //     _videoPlayerController.setVolume(1);
+    //     _isMuted = false;
+    //   } else {
+    //     _videoPlayerController.setVolume(0);
+    //     _isMuted = true;
+    //   }
+    // });
   }
 
   @override
