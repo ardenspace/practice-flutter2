@@ -12,6 +12,8 @@ import 'package:tiktok_clone/constants/sizes.dart';
 import 'package:tiktok_clone/features/videos/video_preview_screen.dart';
 
 class VideoRecordingScreen extends StatefulWidget {
+  static const String routeName = "postVideo";
+  static const String routeURL = "/upload";
   const VideoRecordingScreen({super.key});
 
   @override
@@ -171,7 +173,6 @@ class _VideoRecordingScreenState
   Future<void> didChangeAppLifecycleState(
     AppLifecycleState state,
   ) async {
-    print("✨✨✨state: $state");
     if (!_hasPermission) return;
     if (!_cameraController.value.isInitialized) return;
     if (state == AppLifecycleState.inactive) {
@@ -252,6 +253,11 @@ class _VideoRecordingScreenState
                   if (!_noCamera &&
                       _cameraController.value.isInitialized)
                     CameraPreview(_cameraController),
+                  const Positioned(
+                    top: Sizes.size40,
+                    left: Sizes.size20,
+                    child: CloseButton(color: Colors.white),
+                  ),
                   if (!_noCamera)
                     Positioned(
                       top: Sizes.size20,
