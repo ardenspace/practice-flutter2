@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:tiktok_clone/common/widgets/video_config/video_config.dart';
+import 'package:tiktok_clone/common/widgets/video_config/darkmode_valueNotifier.dart';
+import 'package:tiktok_clone/common/widgets/video_config/video_valueNotifier.dart';
 import 'package:tiktok_clone/constants/breakpoints.dart';
 
 class SettingsScreen extends StatefulWidget {
@@ -23,13 +24,46 @@ class _SettingsScreenState extends State<SettingsScreen> {
   @override
   Widget build(BuildContext context) {
     final tiles = [
-      SwitchListTile(
-        value: VideoConfigData.of(context).autoMute,
-        onChanged: (value) =>
-            VideoConfigData.of(context).toggelMuted(),
-        title: const Text("Auto Mute"),
-        subtitle: const Text(
-          "Videos will be muted by default",
+      // SwitchListTile(
+      //   value: VideoConfigData.of(context).autoMute,
+      //   onChanged: (value) =>
+      //       VideoConfigData.of(context).toggelMuted(),
+      //   title: const Text("Auto Mute"),
+      //   subtitle: const Text(
+      //     "Videos will be muted by default",
+      //   ),
+      // ),
+      // It's weird... but it works... 체인지노티파이어는 실시간으로 데이터를 보고 있지 않음
+      // 아니 정확히 말하면 value가 실시간으로 업데이트 되지 않음
+      // 그럼 어떻게 업데이트를 감지하는가? 그때 쓰이는 게 AnimatedBuilder...
+      // 진짜 이상함 근데 공식문서에서는 둘을 같이 쓰라고 말하고 있음...
+      // 근데 좋은 건 딱 이 부분만 리렌더링이 된다는 것
+      AnimatedBuilder(
+        animation: videoValueNotifier,
+        builder: (context, child) => SwitchListTile(
+          value: videoValueNotifier.value,
+          onChanged: (value) {
+            videoValueNotifier.value =
+                !videoValueNotifier.value;
+          },
+          title: const Text("Auto Mute"),
+          subtitle: const Text(
+            "Videos will be muted by default",
+          ),
+        ),
+      ),
+      AnimatedBuilder(
+        animation: darkmodeValueNotifier,
+        builder: (context, child) => SwitchListTile(
+          value: darkmodeValueNotifier.value,
+          onChanged: (value) {
+            darkmodeValueNotifier.value =
+                !darkmodeValueNotifier.value;
+          },
+          title: const Text("Dark Mode"),
+          subtitle: const Text(
+            "Light mode will be used by default",
+          ),
         ),
       ),
       SwitchListTile(

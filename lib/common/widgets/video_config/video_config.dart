@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 
 // 근데 이 방식 ... 납득은 되는데 너무 장황함 지금 이 비디오 뮤트 버튼만으로 코드를 몇 줄을 썼으며 이렇게 가다간 전역 관리 위젯만 50개는 되것다 ;;;
+// 리버파드 배우기 전에 순차적으로 진행하는 듯
+// 1번이 InheritedWidget
+// 2번 ChangeNotifier
+// 3번 ValueNotifier
 
 class VideoConfigData extends InheritedWidget {
   // VideoConfigData가 하는 역할: 데이터를 받아오고 내보내는 것만 함

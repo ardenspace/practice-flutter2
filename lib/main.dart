@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:tiktok_clone/common/widgets/video_config/video_config.dart';
+import 'package:tiktok_clone/common/widgets/video_config/darkmode_valueNotifier.dart';
 import 'package:tiktok_clone/constants/sizes.dart';
 import 'package:tiktok_clone/generated/l10n.dart';
 import 'package:tiktok_clone/router.dart';
@@ -24,8 +24,9 @@ class TikTokApp extends StatelessWidget {
   Widget build(BuildContext context) {
     S.load(const Locale("en"));
     // 와 이렇게 하니까 언어 설정이 싹 바뀜
-    return VideoConfig(
-      child: MaterialApp.router(
+    return ValueListenableBuilder(
+      valueListenable: darkmodeValueNotifier,
+      builder: (context, value, child) => MaterialApp.router(
         routerConfig: router,
         debugShowCheckedModeBanner: false,
         title: 'Tictok clone',
@@ -39,7 +40,9 @@ class TikTokApp extends StatelessWidget {
           const Locale("en"),
           const Locale("ko"),
         ],
-        themeMode: ThemeMode.system,
+        themeMode: darkmodeValueNotifier.value
+            ? ThemeMode.dark
+            : ThemeMode.light,
         // 근데 이런 themedata title을 뭐 어떻게 외워요?
         // 그래서 나온 패키지가 있음
         // flex_color_scheme / https://pub.dev/packages/flex_color_scheme
