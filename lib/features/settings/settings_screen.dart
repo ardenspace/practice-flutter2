@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tiktok_clone/common/widgets/video_config/darkmode_valueNotifier.dart';
-import 'package:tiktok_clone/common/widgets/video_config/video_config_changeNotifier.dart';
 import 'package:tiktok_clone/constants/breakpoints.dart';
+import 'package:tiktok_clone/features/videos/view_models/playback_config_vm.dart';
 
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({super.key});
@@ -39,15 +39,39 @@ class _SettingsScreenState extends State<SettingsScreen> {
       // 그럼 어떻게 업데이트를 감지하는가? 그때 쓰이는 게 AnimatedBuilder...
       // 진짜 이상함 근데 공식문서에서는 둘을 같이 쓰라고 말하고 있음...
       // 근데 좋은 건 딱 이 부분만 리렌더링이 된다는 것
+      // SwitchListTile.adaptive(
+      //   value: context
+      //       .watch<VideoConfigChangenotifier>()
+      //       .isMuted,
+      //   onChanged: (value) => context
+      //       .read<VideoConfigChangenotifier>()
+      //       .toggleIsMuted(),
+      //   title: const Text("Aute Mute"),
+      //   subtitle: const Text("Videos muted by default."),
+      // ),
       SwitchListTile.adaptive(
         value: context
-            .watch<VideoConfigChangenotifier>()
-            .isMuted,
+            .watch<PlaybackConfigViewModel>()
+            .muted,
         onChanged: (value) => context
-            .read<VideoConfigChangenotifier>()
-            .toggleIsMuted(),
-        title: const Text("Aute Mute"),
-        subtitle: const Text("Videos muted by default."),
+            .read<PlaybackConfigViewModel>()
+            .setMuted(value),
+        title: const Text("Mute video"),
+        subtitle: const Text(
+          "Video will be muted by default",
+        ),
+      ),
+      SwitchListTile.adaptive(
+        value: context
+            .watch<PlaybackConfigViewModel>()
+            .autoPlay,
+        onChanged: (value) => context
+            .read<PlaybackConfigViewModel>()
+            .setAutoPlay(value),
+        title: const Text("Auto Play"),
+        subtitle: const Text(
+          "Video will start playing automatically",
+        ),
       ),
       AnimatedBuilder(
         animation: darkmodeValueNotifier,

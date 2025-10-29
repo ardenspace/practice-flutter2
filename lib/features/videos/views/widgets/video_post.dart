@@ -1,8 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:provider/provider.dart';
-import 'package:tiktok_clone/common/widgets/video_config/video_config_changeNotifier.dart';
 import 'package:tiktok_clone/common/widgets/video_config/video_valueNotifier.dart';
 import 'package:tiktok_clone/constants/gaps.dart';
 import 'package:tiktok_clone/constants/sizes.dart';
@@ -81,11 +79,13 @@ class _VideoPostState extends State<VideoPost>
     // Provider isMuted 변경 시 비디오 볼륨 변경
     if (mounted &&
         _videoPlayerController.value.isInitialized) {
-      final config = context
-          .read<VideoConfigChangenotifier>();
-      _videoPlayerController.setVolume(
-        config.isMuted ? 0 : 1,
-      );
+      // final config = context
+      //     .read<VideoConfigChangenotifier>();
+      // _videoPlayerController.setVolume(
+      //   config.isMuted ? 0 : 1,
+      // );
+
+      _videoPlayerController.setVolume(1);
     }
   }
 
@@ -118,18 +118,20 @@ class _VideoPostState extends State<VideoPost>
   void didChangeDependencies() {
     super.didChangeDependencies();
     // Provider 리스너 추가
-    context.read<VideoConfigChangenotifier>().addListener(
-      _onProviderChanged,
-    );
+    // context.read<VideoConfigChangenotifier>().addListener(
+    //   _onProviderChanged,
+    // );
 
     // 초기 볼륨 설정
     if (_videoPlayerController.value.isInitialized &&
         !kIsWeb) {
-      final config = context
-          .read<VideoConfigChangenotifier>();
-      _videoPlayerController.setVolume(
-        config.isMuted ? 0 : 1,
-      );
+      // final config = context
+      //     .read<VideoConfigChangenotifier>();
+      // _videoPlayerController.setVolume(
+      //   config.isMuted ? 0 : 1,
+      // );
+
+      _videoPlayerController.setVolume(1);
     }
   }
 
@@ -137,9 +139,9 @@ class _VideoPostState extends State<VideoPost>
   void dispose() {
     _videoPlayerController.dispose();
     videoValueNotifier.removeListener(_onVideoValueChanged);
-    context
-        .read<VideoConfigChangenotifier>()
-        .removeListener(_onProviderChanged);
+    // context
+    //     .read<VideoConfigChangenotifier>()
+    //     .removeListener(_onProviderChanged);
     super.dispose();
   }
 
@@ -318,18 +320,16 @@ class _VideoPostState extends State<VideoPost>
             left: 20,
             top: 40,
             child: IconButton(
-              icon: FaIcon(
-                context
-                        .watch<VideoConfigChangenotifier>()
-                        .isMuted
+              icon: const FaIcon(
+                false
                     ? FontAwesomeIcons.volumeOff
                     : FontAwesomeIcons.volumeHigh,
                 color: Colors.white,
               ),
               onPressed: () {
-                context
-                    .read<VideoConfigChangenotifier>()
-                    .toggleIsMuted();
+                // context
+                //     .read<VideoConfigChangenotifier>()
+                //     .toggleIsMuted();
               },
             ),
           ),

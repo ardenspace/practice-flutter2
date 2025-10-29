@@ -4,23 +4,23 @@ class VideoPlaybackConfigRepository {
   static const String _autoplay = "autoplay";
   static const String _muted = "muted";
 
-  final SharedPreferences _preferences;
+  final SharedPreferences? _preferences;
 
   VideoPlaybackConfigRepository(this._preferences);
 
   Future<void> setMuted(bool value) async {
-    _preferences.setBool(_muted, value);
+    await _preferences?.setBool(_muted, value);
   }
 
   Future<void> setAutoPlay(bool value) async {
-    _preferences.setBool(_autoplay, value);
+    await _preferences?.setBool(_autoplay, value);
   }
 
   bool isMuted() {
-    return _preferences.getBool(_muted) ?? false;
+    return _preferences?.getBool(_muted) ?? false;
   }
 
   bool isAutoPlay() {
-    return _preferences.getBool(_autoplay) ?? false;
+    return _preferences?.getBool(_autoplay) ?? false;
   }
 }
