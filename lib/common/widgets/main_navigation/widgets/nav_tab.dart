@@ -36,6 +36,7 @@ class NavTab extends StatelessWidget {
             opacity: isSelected ? 1 : 0.6,
             duration: const Duration(milliseconds: 300),
             child: Column(
+              mainAxisSize: MainAxisSize.min,
               children: [
                 FaIcon(
                   isSelected ? selectedIcon : icon,
