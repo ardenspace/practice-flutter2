@@ -1,9 +1,11 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:provider/provider.dart';
 import 'package:tiktok_clone/common/widgets/video_config/video_valueNotifier.dart';
 import 'package:tiktok_clone/constants/gaps.dart';
 import 'package:tiktok_clone/constants/sizes.dart';
+import 'package:tiktok_clone/features/videos/view_models/playback_config_vm.dart';
 import 'package:tiktok_clone/features/videos/views/widgets/video_button.dart';
 import 'package:tiktok_clone/features/videos/views/widgets/video_comments.dart';
 import 'package:tiktok_clone/generated/l10n.dart';
@@ -29,6 +31,7 @@ class _VideoPostState extends State<VideoPost>
     with SingleTickerProviderStateMixin {
   // with에 mixin을 사용하면 클래스의 메서드와 속성을 전부 가져오겠다는 뜻이 된다.
   late final VideoPlayerController _videoPlayerController;
+  late final PlaybackConfigViewModel _playbackConfigVM;
 
   bool _isPaused = false;
   final Duration _animataionDuration = const Duration(
@@ -106,6 +109,22 @@ class _VideoPostState extends State<VideoPost>
 
     // videoValueNotifier 변경사항 리스닝
     videoValueNotifier.addListener(_onVideoValueChanged);
+
+    _playbackConfigVM = context
+        .read<PlaybackConfigViewModel>();
+    _playbackConfigVM.addListener(_onPlaybackConfigChanged);
+  }
+
+  void _onPlaybackConfigChanged() {
+    if (!mounted ||
+        !_videoPlayerController.value.isInitialized)
+      return;
+
+    final muted = context
+        .read<PlaybackConfigViewModel>()
+        .muted;
+
+    _videoPlayerController.setVolume(muted ? 0 : 1);
   }
 
   // 부연 설명
@@ -139,9 +158,9 @@ class _VideoPostState extends State<VideoPost>
   void dispose() {
     _videoPlayerController.dispose();
     videoValueNotifier.removeListener(_onVideoValueChanged);
-    // context
-    //     .read<VideoConfigChangenotifier>()
-    //     .removeListener(_onProviderChanged);
+    _playbackConfigVM.removeListener(
+      _onPlaybackConfigChanged,
+    );
     super.dispose();
   }
 
@@ -150,7 +169,13 @@ class _VideoPostState extends State<VideoPost>
     if (info.visibleFraction == 1 &&
         !_isPaused &&
         !_videoPlayerController.value.isPlaying) {
-      _videoPlayerController.play();
+      final autoPlay = context
+          .read<PlaybackConfigViewModel>()
+          .autoPlay;
+
+      if (autoPlay) {
+        _videoPlayerController.play();
+      }
     }
     if (_videoPlayerController.value.isPlaying &&
         info.visibleFraction == 0) {
@@ -320,16 +345,22 @@ class _VideoPostState extends State<VideoPost>
             left: 20,
             top: 40,
             child: IconButton(
-              icon: const FaIcon(
-                false
-                    ? FontAwesomeIcons.volumeOff
+              icon: FaIcon(
+                context
+                        .watch<PlaybackConfigViewModel>()
+                        .muted
+                    ? FontAwesomeIcons.volumeXmark
                     : FontAwesomeIcons.volumeHigh,
                 color: Colors.white,
               ),
               onPressed: () {
-                // context
-                //     .read<VideoConfigChangenotifier>()
-                //     .toggleIsMuted();
+                context
+                    .read<PlaybackConfigViewModel>()
+                    .setMuted(
+                      !context
+                          .read<PlaybackConfigViewModel>()
+                          .muted,
+                    );
               },
             ),
           ),
