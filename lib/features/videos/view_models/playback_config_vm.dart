@@ -1,40 +1,39 @@
-import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:tiktok_clone/features/videos/models/playback_config_model.dart';
 import 'package:tiktok_clone/features/videos/repos/video_playback_config_repo.dart';
 
-class PlaybackConfigViewModel extends ChangeNotifier {
+class PlaybackConfigViewModel
+    extends Notifier<PlaybackConfigModel> {
   final VideoPlaybackConfigRepository _repository;
-  late final PlaybackConfigModel _model;
-
-  PlaybackConfigViewModel(this._repository) {
-    final mutedValue = _repository.isMuted();
-    final autoPlayValue = _repository.isAutoPlay();
-
-    print(
-      'Loading saved preferences: muted=$mutedValue, autoPlay=$autoPlayValue',
-    );
-
-    _model = PlaybackConfigModel(
-      muted: mutedValue,
-      autoPlay: autoPlayValue,
-    );
-  }
-
-  bool get muted => _model.muted;
-
-  bool get autoPlay => _model.autoPlay;
+  PlaybackConfigViewModel(this._repository);
 
   void setMuted(bool value) {
-    print('Saving muted preference: $value');
     _repository.setMuted(value);
-    _model.muted = value;
-    notifyListeners();
+    state = PlaybackConfigModel(
+      muted: value,
+      autoPlay: state.autoPlay,
+    );
   }
 
   void setAutoPlay(bool value) {
-    print('Saving autoPlay preference: $value');
     _repository.setAutoPlay(value);
-    _model.autoPlay = value;
-    notifyListeners();
+    state = PlaybackConfigModel(
+      muted: state.muted,
+      autoPlay: value,
+    );
+  }
+
+  @override
+  PlaybackConfigModel build() {
+    return PlaybackConfigModel(
+      muted: _repository.isMuted(),
+      autoPlay: _repository.isAutoPlay(),
+    );
   }
 }
+
+final playbackConfigProvider =
+    NotifierProvider<
+      PlaybackConfigViewModel,
+      PlaybackConfigModel
+    >(() => throw UnimplementedError());

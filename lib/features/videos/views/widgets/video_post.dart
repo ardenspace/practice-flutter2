@@ -1,7 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:provider/provider.dart';
 import 'package:tiktok_clone/common/widgets/video_config/video_valueNotifier.dart';
 import 'package:tiktok_clone/constants/gaps.dart';
 import 'package:tiktok_clone/constants/sizes.dart';
@@ -109,10 +108,6 @@ class _VideoPostState extends State<VideoPost>
 
     // videoValueNotifier 변경사항 리스닝
     videoValueNotifier.addListener(_onVideoValueChanged);
-
-    _playbackConfigVM = context
-        .read<PlaybackConfigViewModel>();
-    _playbackConfigVM.addListener(_onPlaybackConfigChanged);
   }
 
   void _onPlaybackConfigChanged() {
@@ -120,11 +115,7 @@ class _VideoPostState extends State<VideoPost>
         !_videoPlayerController.value.isInitialized)
       return;
 
-    final muted = context
-        .read<PlaybackConfigViewModel>()
-        .muted;
-
-    _videoPlayerController.setVolume(muted ? 0 : 1);
+    _videoPlayerController.setVolume(1);
   }
 
   // 부연 설명
@@ -158,9 +149,6 @@ class _VideoPostState extends State<VideoPost>
   void dispose() {
     _videoPlayerController.dispose();
     videoValueNotifier.removeListener(_onVideoValueChanged);
-    _playbackConfigVM.removeListener(
-      _onPlaybackConfigChanged,
-    );
     super.dispose();
   }
 
@@ -169,11 +157,7 @@ class _VideoPostState extends State<VideoPost>
     if (info.visibleFraction == 1 &&
         !_isPaused &&
         !_videoPlayerController.value.isPlaying) {
-      final autoPlay = context
-          .read<PlaybackConfigViewModel>()
-          .autoPlay;
-
-      if (autoPlay) {
+      if (false) {
         _videoPlayerController.play();
       }
     }
@@ -345,23 +329,13 @@ class _VideoPostState extends State<VideoPost>
             left: 20,
             top: 40,
             child: IconButton(
-              icon: FaIcon(
-                context
-                        .watch<PlaybackConfigViewModel>()
-                        .muted
+              icon: const FaIcon(
+                false
                     ? FontAwesomeIcons.volumeXmark
                     : FontAwesomeIcons.volumeHigh,
                 color: Colors.white,
               ),
-              onPressed: () {
-                context
-                    .read<PlaybackConfigViewModel>()
-                    .setMuted(
-                      !context
-                          .read<PlaybackConfigViewModel>()
-                          .muted,
-                    );
-              },
+              onPressed: () {},
             ),
           ),
           Positioned(
