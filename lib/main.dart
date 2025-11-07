@@ -24,6 +24,7 @@ void main() async {
   try {
     preferences = await SharedPreferences.getInstance();
     print('SharedPreferences initialized successfully');
+    print('SharedPreferences instance: $preferences');
   } catch (e) {
     print('SharedPreferences initialization failed: $e');
     // 실패 시 null로 설정하고 앱은 계속 실행
@@ -33,13 +34,15 @@ void main() async {
   final repository = VideoPlaybackConfigRepository(
     preferences,
   );
+  print(
+    'Repository created, preferences is null: ${preferences == null}',
+  );
 
   runApp(
     ProviderScope(
       overrides: [
-        playbackConfigProvider.overrideWith(
-          () => PlaybackConfigViewModel(repository),
-        ),
+        videoPlaybackConfigRepositoryProvider
+            .overrideWithValue(repository),
       ],
       child: const TikTokApp(),
     ),

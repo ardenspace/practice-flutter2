@@ -1,26 +1,53 @@
 import 'package:shared_preferences/shared_preferences.dart';
 
 class VideoPlaybackConfigRepository {
-  static const String _autoplay = "autoplay";
-  static const String _muted = "muted";
+  final SharedPreferences? _prefs;
 
-  final SharedPreferences? _preferences;
+  static const _mutedKey = 'muted';
+  static const _autoPlayKey = 'autoPlay';
 
-  VideoPlaybackConfigRepository(this._preferences);
-
-  Future<void> setMuted(bool value) async {
-    await _preferences?.setBool(_muted, value);
-  }
-
-  Future<void> setAutoPlay(bool value) async {
-    await _preferences?.setBool(_autoplay, value);
-  }
+  VideoPlaybackConfigRepository(this._prefs);
 
   bool isMuted() {
-    return _preferences?.getBool(_muted) ?? false;
+    final value = _prefs?.getBool(_mutedKey);
+    print('loading muted: $value');
+    return value ?? false;
   }
 
   bool isAutoPlay() {
-    return _preferences?.getBool(_autoplay) ?? false;
+    final value = _prefs?.getBool(_autoPlayKey);
+    print('loading autoPlay: $value');
+    return value ?? true;
+  }
+
+  Future<void> setMuted(bool value) async {
+    if (_prefs == null) {
+      print('setMuted: _prefs is null, cannot save');
+      return;
+    }
+    print('saving muted: $value');
+    final success = await _prefs.setBool(_mutedKey, value);
+    if (!success) {
+      print('setMuted: failed to save');
+      throw Exception('Failed to save muted preference');
+    }
+    print('setMuted: saved successfully');
+  }
+
+  Future<void> setAutoPlay(bool value) async {
+    if (_prefs == null) {
+      print('setAutoPlay: _prefs is null, cannot save');
+      return;
+    }
+    print('saving autoPlay: $value');
+    final success = await _prefs.setBool(
+      _autoPlayKey,
+      value,
+    );
+    if (!success) {
+      print('setAutoPlay: failed to save');
+      throw Exception('Failed to save autoplay preference');
+    }
+    print('setAutoPlay: saved successfully');
   }
 }
