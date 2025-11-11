@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1027887561205",
+    "project_id": "tik-tok-arden-dev",
+    "storage_bucket": "tik-tok-arden-dev.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1027887561205:android:2707109cdb305a805008bc",
+        "android_client_info": {
+          "package_name": "com.example.tiktok_clone"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBQ8AECpXSjOQhtPXkLr6iC1VW0-PHF4Zo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
