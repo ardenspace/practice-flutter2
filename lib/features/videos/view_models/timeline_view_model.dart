@@ -5,11 +5,7 @@ import 'package:tiktok_clone/features/videos/models/video_model.dart';
 
 class TimeLineViewModel
     extends AsyncNotifier<List<VideoModel>> {
-  List<VideoModel> _list = [
-    VideoModel(title: "Video 1"),
-    VideoModel(title: "Video 2"),
-    VideoModel(title: "Video 3"),
-  ];
+  List<VideoModel> _list = [];
 
   void uploadVideo() async {
     state = const AsyncValue.loading();
