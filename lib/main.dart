@@ -55,17 +55,17 @@ void main() async {
   );
 }
 
-class TikTokApp extends StatelessWidget {
+class TikTokApp extends ConsumerWidget {
   const TikTokApp({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     // S.load(const Locale("en"));
     // 와 이렇게 하니까 언어 설정이 싹 바뀜
     return ValueListenableBuilder(
       valueListenable: darkmodeValueNotifier,
       builder: (context, value, child) => MaterialApp.router(
-        routerConfig: router,
+        routerConfig: ref.watch(routerProvider),
         debugShowCheckedModeBanner: false,
         title: 'Tictok clone',
         localizationsDelegates: [
