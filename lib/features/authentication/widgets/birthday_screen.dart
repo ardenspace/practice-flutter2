@@ -45,16 +45,7 @@ class _BirthdayScreenState
   }
 
   void _onNextTap() {
-    // context.goNamed(
-    //   InterestsScreen.routeName,
-    // );
-    ref.read(signUpProvider.notifier).signUp();
-    // Navigator.of(context).pushAndRemoveUntil(
-    //   MaterialPageRoute(
-    //     builder: (context) => const InterestsScreen(),
-    //   ),
-    //   (route) => false,
-    // );
+    ref.read(signUpProvider.notifier).signUp(context);
   }
 
   void _setTextFieldDate(DateTime date) {

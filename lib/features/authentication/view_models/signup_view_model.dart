@@ -6,6 +6,7 @@ import 'package:flutter_riverpod/legacy.dart';
 import 'package:go_router/go_router.dart';
 import 'package:tiktok_clone/features/authentication/widgets/onboarding/interests_screen.dart';
 import 'package:tiktok_clone/features/repos/authentication_repos.dart';
+import 'package:tiktok_clone/utils.dart';
 
 class SignUpViewModel extends AsyncNotifier<void> {
   late final AuthenticationRespository _authRepo;
@@ -25,7 +26,7 @@ class SignUpViewModel extends AsyncNotifier<void> {
       ),
     );
     if (state.hasError) {
-      // showFirebaseErrorSnack(context, state.error);
+      showFirebaseErrorSnack(context, state.error);
     } else {
       context.goNamed(InterestsScreen.routeName);
     }
