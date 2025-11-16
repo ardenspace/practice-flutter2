@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -5,6 +7,7 @@ import 'package:tiktok_clone/constants/gaps.dart';
 import 'package:tiktok_clone/constants/sizes.dart';
 import 'package:tiktok_clone/features/authentication/view_models/signup_view_model.dart';
 import 'package:tiktok_clone/features/authentication/widgets/form_button.dart';
+import 'package:tiktok_clone/features/authentication/widgets/onboarding/interests_screen.dart';
 
 class BirthdayScreen extends ConsumerStatefulWidget {
   const BirthdayScreen({super.key});
@@ -23,14 +26,16 @@ class _BirthdayScreenState
   // code challenge
   late DateTime now;
   late DateTime maxdate;
+  late DateTime _selectedDate;
 
   @override
   void initState() {
     super.initState();
     now = DateTime.now();
     maxdate = DateTime(now.year - 12, now.month, now.day);
+    _selectedDate = maxdate; // 초기 선택 날짜 설정
     _setTextFieldDate(
-      initialDate,
+      maxdate,
     ); // inistate가 실행될 때에 initialDate 값이 참조되므로 에러가 안 남
     // 바깥에서 바로 갖다 써버리면 아직 실행할 단계가 아닌데 실행해서 에러가 남
     // 바깥에서는 타입 체크, 상수 계산 같은 걸 하므로 const 값만 사용 가능
@@ -45,10 +50,30 @@ class _BirthdayScreenState
   }
 
   void _onNextTap() {
-    ref.read(signUpProvider.notifier).signUp(context);
+    // JSON 형태로 저장
+    final birthdayData = {
+      "birthday": _selectedDate.toIso8601String(),
+    };
+    final birthdayJson = jsonEncode(birthdayData);
+
+    print("birthdayJson✨✨✨✨ $birthdayJson");
+
+    ref.read(signUpForm.notifier).state = {
+      ...ref.read(signUpForm.notifier).state,
+      "bio": birthdayJson,
+    };
+
+    // interests_screen으로 이동
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => const InterestsScreen(),
+      ),
+    );
   }
 
   void _setTextFieldDate(DateTime date) {
+    _selectedDate = date; // 현재 선택된 날짜 저장
     final textDate = date.toString().split(" ").first;
     _birthdayController.value = TextEditingValue(
       text: textDate,

@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:tiktok_clone/constants/gaps.dart';
 import 'package:tiktok_clone/constants/sizes.dart';
@@ -9,15 +10,16 @@ enum Direction { right, left }
 
 enum Page { first, second }
 
-class TutorialScreen extends StatefulWidget {
+class TutorialScreen extends ConsumerStatefulWidget {
   const TutorialScreen({super.key});
 
   @override
-  State<TutorialScreen> createState() =>
+  ConsumerState<TutorialScreen> createState() =>
       _TutorialScreenState();
 }
 
-class _TutorialScreenState extends State<TutorialScreen> {
+class _TutorialScreenState
+    extends ConsumerState<TutorialScreen> {
   Direction _direction = Direction.right;
   Page _showingPage = Page.first;
 
@@ -46,13 +48,8 @@ class _TutorialScreenState extends State<TutorialScreen> {
   }
 
   void _onEnterAppTap() {
+    // /home으로 이동
     context.go("/home");
-    // Navigator.of(context).pushAndRemoveUntil(
-    //   MaterialPageRoute(
-    //     builder: (context) => const MainNavigationScreen(),
-    //   ),
-    //   (route) => false,
-    // );
   }
 
   @override

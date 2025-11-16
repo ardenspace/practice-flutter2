@@ -1,9 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:tiktok_clone/constants/gaps.dart';
 import 'package:tiktok_clone/constants/sizes.dart';
+import 'package:tiktok_clone/features/authentication/view_models/signup_view_model.dart';
 import 'package:tiktok_clone/features/authentication/widgets/onboarding/widgets/interets_button.dart';
 import 'package:tiktok_clone/features/authentication/widgets/onboarding/widgets/tutorial_screen.dart';
+import 'package:tiktok_clone/utils.dart';
 
 const interests = [
   "Daily Life",
@@ -46,17 +49,18 @@ const interests = [
   "Home & Garden",
 ];
 
-class InterestsScreen extends StatefulWidget {
-  static const String routeURL = "/tutorial";
+class InterestsScreen extends ConsumerStatefulWidget {
+  static const String routeURL = "/interests";
   static const String routeName = "interests";
   const InterestsScreen({super.key});
 
   @override
-  State<InterestsScreen> createState() =>
+  ConsumerState<InterestsScreen> createState() =>
       _InterestsScreenState();
 }
 
-class _InterestsScreenState extends State<InterestsScreen> {
+class _InterestsScreenState
+    extends ConsumerState<InterestsScreen> {
   final ScrollController _scrollController =
       ScrollController();
 
@@ -80,12 +84,8 @@ class _InterestsScreenState extends State<InterestsScreen> {
   }
 
   void _onNextTap() {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => const TutorialScreen(),
-      ),
-    );
+    // 회원가입 시작 (ref.listen에서 성공 시 tutorial_screen으로 이동)
+    ref.read(signUpProvider.notifier).signUp();
   }
 
   @override
@@ -103,6 +103,22 @@ class _InterestsScreenState extends State<InterestsScreen> {
 
   @override
   Widget build(BuildContext context) {
+    ref.listen(signUpProvider, (previous, next) {
+      if (!context.mounted) return;
+
+      if (next.hasError) {
+        showFirebaseErrorSnack(context, next.error);
+      } else if (next.hasValue && !next.isLoading) {
+        // 회원가입 성공 시 tutorial_screen으로 이동
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const TutorialScreen(),
+          ),
+        );
+      }
+    });
+
     return Scaffold(
       appBar: AppBar(
         title: AnimatedOpacity(
