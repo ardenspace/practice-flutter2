@@ -100,10 +100,10 @@ class S {
     );
   }
 
-  /// `Continue with Apple`
+  /// `Continue with Github`
   String get appleButton {
     return Intl.message(
-      'Continue with Apple',
+      'Continue with Github',
       name: 'appleButton',
       desc: '',
       args: [],

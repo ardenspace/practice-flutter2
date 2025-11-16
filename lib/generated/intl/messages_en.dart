@@ -38,7 +38,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "alreayAccount": MessageLookupByLibrary.simpleMessage(
       "Already have an account?",
     ),
-    "appleButton": MessageLookupByLibrary.simpleMessage("Continue with Apple"),
+    "appleButton": MessageLookupByLibrary.simpleMessage("Continue with Github"),
     "commentCount": m0,
     "commentTitle": m1,
     "emailPasswordButton": MessageLookupByLibrary.simpleMessage(

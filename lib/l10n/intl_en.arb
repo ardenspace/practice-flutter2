@@ -26,7 +26,7 @@
   },
   "signUpSubtitle": "Create a profile, follow other accounts, make your own videos, and more.",
   "emailPasswordButton": "Use email & password",
-  "appleButton": "Continue with Apple",
+  "appleButton": "Continue with Github",
   "alreayAccount": "Already have an account?",
   "logIn": "Log in {gender, select, male{sir} female{ma'am} other{}}",
   "@logIn": {

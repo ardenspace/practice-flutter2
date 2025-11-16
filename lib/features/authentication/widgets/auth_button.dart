@@ -5,19 +5,30 @@ import 'package:tiktok_clone/constants/sizes.dart';
 class AuthButton extends StatelessWidget {
   final FaIcon icon;
   final String text;
-  final VoidCallback onNavigate;
+  final VoidCallback? onNavigate;
+  final Future<void> Function()? onNavigateAsync;
 
   const AuthButton({
     super.key,
     required this.icon,
     required this.text,
-    required this.onNavigate,
-  });
+    this.onNavigate,
+    this.onNavigateAsync,
+  }) : assert(
+         onNavigate != null || onNavigateAsync != null,
+         'Either onNavigate or onNavigateAsync must be provided',
+       );
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: onNavigate,
+      onTap: () {
+        if (onNavigate != null) {
+          onNavigate!();
+        } else if (onNavigateAsync != null) {
+          onNavigateAsync!();
+        }
+      },
       child: FractionallySizedBox(
         // 부모의 크기에 맞춰 줌
         widthFactor: 1,

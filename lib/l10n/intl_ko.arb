@@ -2,7 +2,7 @@
   "signUpTitle": "{nameOfTheApp}에 가입하세요 {when}",
   "signUpSubtitle": "프로필을 만들고 친구와 소통하세요. 그리고 나만의 비디오를 만들어 보세요.",
   "emailPasswordButton": "Use email & password",
-  "appleButton": "애플로 함께하기",
+  "appleButton": "깃헙으로 함께하기",
   "alreadyHaveAnAccount": "계정이 이미 있나요?",
   "logIn": "{gender, select, male{로그인 하세요} female{로그인 하세요} other{로그인}}",
   "alreayAccount": "계정이 이미 있나요?",

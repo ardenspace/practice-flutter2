@@ -34,7 +34,7 @@ class MessageLookup extends MessageLookupByLibrary {
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
     "alreayAccount": MessageLookupByLibrary.simpleMessage("계정이 이미 있나요?"),
-    "appleButton": MessageLookupByLibrary.simpleMessage("애플로 함께하기"),
+    "appleButton": MessageLookupByLibrary.simpleMessage("깃헙으로 함께하기"),
     "commentCount": m0,
     "commentTitle": m1,
     "emailPasswordButton": MessageLookupByLibrary.simpleMessage(
