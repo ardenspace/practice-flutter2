@@ -15,6 +15,8 @@ class UsersViewModel
 
   @override
   FutureOr<UserProfileModel> build() async {
+    await Future.delayed(const Duration(seconds: 10));
+
     _userRepository = ref.read(userRepo);
     _authenticationRespository = ref.read(authRepo);
 
