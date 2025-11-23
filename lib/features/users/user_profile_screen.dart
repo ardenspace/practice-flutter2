@@ -85,6 +85,10 @@ class _UserProfileScreenState
                                       children: [
                                         Avatar(
                                           name: data.name,
+                                          hasAvatar:
+                                              data.hasAvatar ??
+                                              false,
+                                          uid: data.uid,
                                         ),
                                         Gaps.h32,
                                         Column(
