@@ -5,8 +5,9 @@ import 'package:tiktok_clone/constants/breakpoints.dart';
 import 'package:tiktok_clone/constants/gaps.dart';
 import 'package:tiktok_clone/constants/sizes.dart';
 import 'package:tiktok_clone/features/settings/settings_screen.dart';
-import 'package:tiktok_clone/features/users/persistent_tab_bar.dart';
 import 'package:tiktok_clone/features/users/view_models/users_view_model.dart';
+import 'package:tiktok_clone/features/users/widgets/avatar.dart';
+import 'package:tiktok_clone/features/users/widgets/persistent_tab_bar.dart';
 
 class UserProfileScreen extends ConsumerStatefulWidget {
   final String username;
@@ -82,15 +83,8 @@ class _UserProfileScreenState
                                           MainAxisAlignment
                                               .center,
                                       children: [
-                                        CircleAvatar(
-                                          radius: 50,
-                                          foregroundImage:
-                                              const AssetImage(
-                                                "assets/images/test-image4.jpg",
-                                              ),
-                                          child: Text(
-                                            data.name,
-                                          ),
+                                        Avatar(
+                                          name: data.name,
                                         ),
                                         Gaps.h32,
                                         Column(
