@@ -59,6 +59,33 @@ class UsersViewModel
       "hasAvatar": true,
     });
   }
+
+  Future<void> updateLink(String newLink) async {
+    if (state.value == null) return;
+    state = AsyncValue.data(
+      state.value!.copyWith(link: newLink),
+    );
+    await _userRepository.updateUser(state.value!.uid, {
+      "link": newLink,
+    });
+  }
+
+  Future<void> updateBioIntro(String newIntro) async {
+    if (state.value == null) return;
+
+    // bio JSON을 파싱해서 intro만 업데이트 (birthday 유지)
+    final updatedBio = state.value!.updateBioIntro(
+      newIntro,
+    );
+
+    state = AsyncValue.data(
+      state.value!.copyWith(bio: updatedBio),
+    );
+
+    await _userRepository.updateUser(state.value!.uid, {
+      "bio": updatedBio,
+    });
+  }
 }
 
 final usersProvider =

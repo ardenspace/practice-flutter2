@@ -56,8 +56,6 @@ class _BirthdayScreenState
     };
     final birthdayJson = jsonEncode(birthdayData);
 
-    print("birthdayJson✨✨✨✨ $birthdayJson");
-
     ref.read(signUpForm.notifier).state = {
       ...ref.read(signUpForm.notifier).state,
       "bio": birthdayJson,

@@ -5,6 +5,7 @@ import 'package:tiktok_clone/constants/breakpoints.dart';
 import 'package:tiktok_clone/constants/gaps.dart';
 import 'package:tiktok_clone/constants/sizes.dart';
 import 'package:tiktok_clone/features/settings/settings_screen.dart';
+import 'package:tiktok_clone/features/users/models/user_profile_model.dart';
 import 'package:tiktok_clone/features/users/view_models/users_view_model.dart';
 import 'package:tiktok_clone/features/users/widgets/avatar.dart';
 import 'package:tiktok_clone/features/users/widgets/persistent_tab_bar.dart';
@@ -26,12 +27,85 @@ class UserProfileScreen extends ConsumerStatefulWidget {
 
 class _UserProfileScreenState
     extends ConsumerState<UserProfileScreen> {
+  bool _isEditingLink = false;
+  late final TextEditingController _linkController;
+  bool _isEditingBio = false;
+  late final TextEditingController _bioController;
+
+  @override
+  void initState() {
+    super.initState();
+    _linkController = TextEditingController();
+    _bioController = TextEditingController();
+  }
+
+  @override
+  void dispose() {
+    _linkController.dispose();
+    _bioController.dispose();
+    super.dispose();
+  }
+
   void _onGearPressed(BuildContext context) {
     Navigator.of(context).push(
       MaterialPageRoute(
         builder: (context) => const SettingsScreen(),
       ),
     );
+  }
+
+  void _toggleEditLink(UserProfileModel profile) {
+    setState(() {
+      _isEditingLink = !_isEditingLink;
+      _isEditingBio = !_isEditingBio;
+
+      if (_isEditingLink) {
+        _linkController.text = profile.link == 'undefined'
+            ? ''
+            : profile.link;
+      }
+
+      if (_isEditingBio) {
+        _bioController.text = profile.bioIntro ?? '';
+      }
+    });
+  }
+
+  Future<void> _saveLink(
+    String currentLink,
+    String currentBioIntro,
+  ) async {
+    final newLink = _linkController.text.trim();
+    final newIntro = _bioController.text.trim();
+
+    final linkChanged =
+        newLink.isNotEmpty && newLink != currentLink;
+    final bioChanged = newIntro != currentBioIntro;
+
+    if (!linkChanged && !bioChanged) {
+      setState(() {
+        _isEditingLink = false;
+        _isEditingBio = false;
+      });
+      return;
+    }
+
+    if (linkChanged) {
+      await ref
+          .read(usersProvider.notifier)
+          .updateLink(newLink);
+    }
+
+    if (bioChanged) {
+      await ref
+          .read(usersProvider.notifier)
+          .updateBioIntro(newIntro);
+    }
+
+    setState(() {
+      _isEditingLink = false;
+      _isEditingBio = false;
+    });
   }
 
   @override
@@ -61,6 +135,17 @@ class _UserProfileScreenState
                         title: Text(data.name),
                         centerTitle: true,
                         actions: [
+                          IconButton(
+                            onPressed: () =>
+                                _toggleEditLink(data),
+                            icon: FaIcon(
+                              _isEditingLink
+                                  ? FontAwesomeIcons
+                                        .floppyDisk
+                                  : FontAwesomeIcons.pen,
+                              size: Sizes.size20,
+                            ),
+                          ),
                           IconButton(
                             onPressed: () =>
                                 _onGearPressed(context),
@@ -249,46 +334,123 @@ class _UserProfileScreenState
                                         ),
                                       ],
                                     ),
-                                    const Column(
+                                    Column(
                                       children: [
                                         Gaps.v20,
-                                        Padding(
-                                          padding:
-                                              EdgeInsets.symmetric(
-                                                horizontal:
-                                                    Sizes
-                                                        .size32,
+                                        _isEditingBio
+                                            ? Padding(
+                                                padding: const EdgeInsets.symmetric(
+                                                  horizontal:
+                                                      Sizes
+                                                          .size32,
+                                                ),
+                                                child: TextField(
+                                                  controller:
+                                                      _bioController,
+                                                  maxLines:
+                                                      3,
+                                                  textAlign:
+                                                      TextAlign
+                                                          .start,
+                                                  decoration: const InputDecoration(
+                                                    border:
+                                                        OutlineInputBorder(),
+                                                    contentPadding:
+                                                        EdgeInsets.all(
+                                                          Sizes.size8,
+                                                        ),
+                                                  ),
+                                                ),
+                                              )
+                                            : Padding(
+                                                padding: const EdgeInsets.symmetric(
+                                                  horizontal:
+                                                      Sizes
+                                                          .size32,
+                                                ),
+                                                child: Text(
+                                                  data.bioIntro ??
+                                                      '',
+                                                  textAlign:
+                                                      TextAlign
+                                                          .center,
+                                                ),
                                               ),
-                                          child: Text(
-                                            "All highlights and where to watch live matches on FIFA+ I wonder how it would loook",
-                                            textAlign:
-                                                TextAlign
-                                                    .center,
-                                          ),
-                                        ),
                                         Gaps.v5,
-                                        Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment
-                                                  .center,
-                                          children: [
-                                            FaIcon(
-                                              FontAwesomeIcons
-                                                  .link,
-                                              size: Sizes
-                                                  .size12,
-                                            ),
-                                            Gaps.h4,
-                                            Text(
-                                              "https://nomadcoders.co",
-                                              style: TextStyle(
-                                                fontWeight:
-                                                    FontWeight
-                                                        .w600,
+                                        _isEditingLink
+                                            ? Padding(
+                                                padding: const EdgeInsets.symmetric(
+                                                  horizontal:
+                                                      Sizes
+                                                          .size32,
+                                                ),
+                                                child: Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment
+                                                          .center,
+                                                  children: [
+                                                    const FaIcon(
+                                                      FontAwesomeIcons
+                                                          .link,
+                                                      size:
+                                                          Sizes.size12,
+                                                    ),
+                                                    Gaps.h4,
+                                                    Expanded(
+                                                      child: TextField(
+                                                        controller:
+                                                            _linkController,
+                                                        decoration: const InputDecoration(
+                                                          border: UnderlineInputBorder(),
+                                                          contentPadding: EdgeInsets.symmetric(
+                                                            horizontal: Sizes.size8,
+                                                          ),
+                                                        ),
+                                                        style: const TextStyle(
+                                                          fontWeight: FontWeight.w600,
+                                                        ),
+                                                      ),
+                                                    ),
+                                                    Gaps.h4,
+                                                    IconButton(
+                                                      onPressed: () => _saveLink(
+                                                        data.link,
+                                                        data.bioIntro ??
+                                                            '',
+                                                      ),
+                                                      icon: const FaIcon(
+                                                        FontAwesomeIcons.check,
+                                                        size:
+                                                            Sizes.size16,
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              )
+                                            : Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment
+                                                        .center,
+                                                children: [
+                                                  const FaIcon(
+                                                    FontAwesomeIcons
+                                                        .link,
+                                                    size: Sizes
+                                                        .size12,
+                                                  ),
+                                                  Gaps.h4,
+                                                  Text(
+                                                    data.link ==
+                                                            'undefined'
+                                                        ? ''
+                                                        : data.link,
+                                                    style: const TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.w600,
+                                                    ),
+                                                  ),
+                                                ],
                                               ),
-                                            ),
-                                          ],
-                                        ),
                                         Gaps.v20,
                                       ],
                                     ),
@@ -481,42 +643,125 @@ class _UserProfileScreenState
                                       ),
                                     ),
                                     Gaps.v14,
-                                    const Padding(
-                                      padding:
-                                          EdgeInsets.symmetric(
-                                            horizontal:
-                                                Sizes
-                                                    .size32,
+                                    _isEditingBio
+                                        ? Padding(
+                                            padding: const EdgeInsets.symmetric(
+                                              horizontal:
+                                                  Sizes
+                                                      .size32,
+                                            ),
+                                            child: TextField(
+                                              controller:
+                                                  _bioController,
+                                              maxLines: 3,
+                                              textAlign:
+                                                  TextAlign
+                                                      .start,
+                                              decoration: const InputDecoration(
+                                                border:
+                                                    OutlineInputBorder(),
+                                                contentPadding:
+                                                    EdgeInsets.all(
+                                                      Sizes
+                                                          .size8,
+                                                    ),
+                                              ),
+                                            ),
+                                          )
+                                        : Padding(
+                                            padding: const EdgeInsets.symmetric(
+                                              horizontal:
+                                                  Sizes
+                                                      .size32,
+                                            ),
+                                            child: Text(
+                                              data.bioIntro ??
+                                                  '',
+                                              textAlign:
+                                                  TextAlign
+                                                      .center,
+                                            ),
                                           ),
-                                      child: Text(
-                                        "All highlights and where to watch live matches on FIFA+ I wonder how it would loook",
-                                        textAlign: TextAlign
-                                            .center,
-                                      ),
-                                    ),
                                     Gaps.v14,
-                                    const Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment
-                                              .center,
-                                      children: [
-                                        FaIcon(
-                                          FontAwesomeIcons
-                                              .link,
-                                          size:
-                                              Sizes.size12,
-                                        ),
-                                        Gaps.h4,
-                                        Text(
-                                          "https://nomadcoders.co",
-                                          style: TextStyle(
-                                            fontWeight:
-                                                FontWeight
-                                                    .w600,
+                                    _isEditingLink
+                                        ? Padding(
+                                            padding: const EdgeInsets.symmetric(
+                                              horizontal:
+                                                  Sizes
+                                                      .size32,
+                                            ),
+                                            child: Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .center,
+                                              children: [
+                                                const FaIcon(
+                                                  FontAwesomeIcons
+                                                      .link,
+                                                  size: Sizes
+                                                      .size12,
+                                                ),
+                                                Gaps.h4,
+                                                Expanded(
+                                                  child: TextField(
+                                                    controller:
+                                                        _linkController,
+                                                    decoration: const InputDecoration(
+                                                      border:
+                                                          UnderlineInputBorder(),
+                                                      contentPadding: EdgeInsets.symmetric(
+                                                        horizontal:
+                                                            Sizes.size8,
+                                                      ),
+                                                    ),
+                                                    style: const TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.w600,
+                                                    ),
+                                                  ),
+                                                ),
+                                                Gaps.h4,
+                                                IconButton(
+                                                  onPressed: () => _saveLink(
+                                                    data.link,
+                                                    data.bioIntro ??
+                                                        '',
+                                                  ),
+                                                  icon: const FaIcon(
+                                                    FontAwesomeIcons
+                                                        .check,
+                                                    size: Sizes
+                                                        .size16,
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          )
+                                        : Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment
+                                                    .center,
+                                            children: [
+                                              const FaIcon(
+                                                FontAwesomeIcons
+                                                    .link,
+                                                size: Sizes
+                                                    .size12,
+                                              ),
+                                              Gaps.h4,
+                                              Text(
+                                                data.link ==
+                                                        'undefined'
+                                                    ? ''
+                                                    : data.link,
+                                                style: const TextStyle(
+                                                  fontWeight:
+                                                      FontWeight
+                                                          .w600,
+                                                ),
+                                              ),
+                                            ],
                                           ),
-                                        ),
-                                      ],
-                                    ),
                                     Gaps.v20,
                                   ],
                                 ),
