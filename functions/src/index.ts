@@ -13,6 +13,22 @@ export const onVideoCreated = onDocumentCreated(
     if (!snapshot) {
       return;
     }
-    await snapshot.ref.update({ hello: "from functions" });
+    const spawn = require("child-process-promise").spawn;
+    const video = snapshot.data();
+    await spawn("ffmpeg", [
+      "-i",
+      video.fileUrl,
+      "-ss",
+      "00:00:01.000", // 1초대의 프레임
+      "-vframes",
+      "1",
+      "-vf",
+      "scale=150:-1", // 너비 150에 맞춰 낮추기
+      `/tmp/${snapshot.id}.jpg`, // 임시 tmp 폴더에 저장
+    ]);
+    const storage = admin.storage();
+    await storage.bucket().upload(`/tmp/${snapshot.id}.jpg`, {
+      destination: `thumbnails/${snapshot.id}.jpg`,
+    });
   }
 );
