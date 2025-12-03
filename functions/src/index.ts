@@ -27,8 +27,21 @@ export const onVideoCreated = onDocumentCreated(
       `/tmp/${snapshot.id}.jpg`, // 임시 tmp 폴더에 저장
     ]);
     const storage = admin.storage();
-    await storage.bucket().upload(`/tmp/${snapshot.id}.jpg`, {
+    const [file, _] = await storage.bucket().upload(`/tmp/${snapshot.id}.jpg`, {
       destination: `thumbnails/${snapshot.id}.jpg`,
     });
+    await file.makePublic();
+    await snapshot.ref.update({ thumbnailUrl: file.publicUrl() });
+
+    const db = admin.firestore();
+    await db
+      .collection("users")
+      .doc(video.creatorUid)
+      .collection("videos")
+      .doc(snapshot.id)
+      .set({
+        thumbnailUrl: file.publicUrl(),
+        videoId: snapshot.id,
+      });
   }
 );
