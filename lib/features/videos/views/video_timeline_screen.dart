@@ -72,10 +72,14 @@ class VideoTimelineScreenState
               scrollDirection: Axis.vertical,
               onPageChanged: _onPageChanged,
               itemCount: videos.length,
-              itemBuilder: (context, index) => VideoPost(
-                onVideoFinished: _onVideoFinished,
-                index: index,
-              ),
+              itemBuilder: (context, index) {
+                final videoData = videos[index];
+                return VideoPost(
+                  videoData: videoData,
+                  onVideoFinished: _onVideoFinished,
+                  index: index,
+                );
+              },
             ),
           ),
         );

@@ -61,6 +61,15 @@ class _VideoRecordingScreenState
       return;
     }
 
+    // 기존 컨트롤러가 있으면 먼저 dispose
+    try {
+      if (_cameraController.value.isInitialized) {
+        await _cameraController.dispose();
+      }
+    } catch (e) {
+      // 첫 초기화인 경우 무시
+    }
+
     _cameraController = CameraController(
       cameras[_isSelfieMode ? 1 : 0],
       ResolutionPreset.ultraHigh,
@@ -179,13 +188,16 @@ class _VideoRecordingScreenState
     AppLifecycleState state,
   ) async {
     if (!_hasPermission) return;
-    if (!_cameraController.value.isInitialized) return;
     if (state == AppLifecycleState.inactive) {
-      _cameraController.dispose();
+      if (_cameraController.value.isInitialized) {
+        await _cameraController.dispose();
+      }
     } else if (state == AppLifecycleState.resumed) {
-      await initCamera();
-      if (!mounted) return;
-      setState(() {});
+      if (!_cameraController.value.isInitialized) {
+        await initCamera();
+        if (!mounted) return;
+        setState(() {});
+      }
     }
   }
 
@@ -193,7 +205,14 @@ class _VideoRecordingScreenState
   void dispose() {
     _progressAnimationController.dispose();
     _buttonAnimationController.dispose();
-    _cameraController.dispose();
+    WidgetsBinding.instance.removeObserver(this);
+    try {
+      if (_cameraController.value.isInitialized) {
+        _cameraController.dispose();
+      }
+    } catch (e) {
+      // 컨트롤러가 초기화되지 않은 경우 무시
+    }
     super.dispose();
   }
 

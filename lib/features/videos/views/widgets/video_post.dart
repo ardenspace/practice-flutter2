@@ -5,6 +5,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:tiktok_clone/common/widgets/video_config/video_valueNotifier.dart';
 import 'package:tiktok_clone/constants/gaps.dart';
 import 'package:tiktok_clone/constants/sizes.dart';
+import 'package:tiktok_clone/features/videos/models/video_model.dart';
 import 'package:tiktok_clone/features/videos/view_models/playback_config_vm.dart';
 import 'package:tiktok_clone/features/videos/views/widgets/video_button.dart';
 import 'package:tiktok_clone/features/videos/views/widgets/video_comments.dart';
@@ -14,11 +15,13 @@ import 'package:visibility_detector/visibility_detector.dart';
 
 class VideoPost extends ConsumerStatefulWidget {
   final Function onVideoFinished;
+  final VideoModel videoData;
 
   final int index;
 
   const VideoPost({
     super.key,
+    required this.videoData,
     required this.onVideoFinished,
     required this.index,
   });
@@ -241,7 +244,10 @@ class VideoPostState extends ConsumerState<VideoPost>
             child:
                 _videoPlayerController.value.isInitialized
                 ? VideoPlayer(_videoPlayerController)
-                : Container(color: Colors.black),
+                : Image.network(
+                    widget.videoData.thumbnailUrl ?? "",
+                    fit: BoxFit.cover,
+                  ),
           ),
           Positioned.fill(
             child: GestureDetector(onTap: _onTogglePause),
@@ -282,18 +288,18 @@ class VideoPostState extends ConsumerState<VideoPost>
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text(
-                  "@hyeono",
-                  style: TextStyle(
+                Text(
+                  "@${widget.videoData.creator}",
+                  style: const TextStyle(
                     color: Colors.white,
                     fontWeight: FontWeight.bold,
                     fontSize: Sizes.size20,
                   ),
                 ),
                 Gaps.v10,
-                const Text(
-                  "I got this for free!",
-                  style: TextStyle(
+                Text(
+                  widget.videoData.description ?? "",
+                  style: const TextStyle(
                     color: Colors.white,
                     fontSize: Sizes.size16,
                   ),
@@ -303,7 +309,7 @@ class VideoPostState extends ConsumerState<VideoPost>
                   children: [
                     Expanded(
                       child: Text(
-                        "I got this for free! blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah",
+                        widget.videoData.description ?? "",
                         maxLines: _isViewMore ? null : 1,
                         overflow: _isViewMore
                             ? null
@@ -348,19 +354,23 @@ class VideoPostState extends ConsumerState<VideoPost>
             right: 10,
             child: Column(
               children: [
-                const CircleAvatar(
+                CircleAvatar(
                   radius: 25,
                   backgroundColor: Colors.black,
                   foregroundColor: Colors.white,
                   foregroundImage: NetworkImage(
-                    "https://avatars.githubusercontent.com/u/202112113?s=400&u=d44fdf9d52f4e677b0dec4786da0cfde6bed80e7&v=4",
+                    "https://firebasestorage.googleapis.com/v0/b/tik-tok-arden-dev.firebasestorage.app/o/avatars%2F${widget.videoData.creatorUid}?alt=media",
                   ),
-                  child: Text("hyeon"),
+                  child: Text(widget.videoData.creator),
                 ),
                 Gaps.v20,
                 VideoButton(
                   icon: FontAwesomeIcons.solidHeart,
-                  text: S.of(context).likeCount(1000000),
+                  text: S
+                      .of(context)
+                      .likeCount(
+                        widget.videoData.likes ?? 0,
+                      ),
                 ),
                 Gaps.v16,
                 GestureDetector(
@@ -369,7 +379,9 @@ class VideoPostState extends ConsumerState<VideoPost>
                     icon: FontAwesomeIcons.solidComment,
                     text: S
                         .of(context)
-                        .commentCount(1000000),
+                        .commentCount(
+                          widget.videoData.comments ?? 0,
+                        ),
                   ),
                 ),
                 Gaps.v16,
