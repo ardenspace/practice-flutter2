@@ -44,7 +44,7 @@ class VideoTimelineScreenState
   }
 
   Future<void> _onRefresh() {
-    return Future.delayed(const Duration(seconds: 5));
+    return ref.watch(timeLineProvider.notifier).refresh();
   }
 
   @override

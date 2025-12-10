@@ -21,6 +21,16 @@ class VideoRepository {
     await _db.collection("videos").add(data.toJson());
   }
 
+  Future<void> likeVideo(
+    String videoId,
+    String userId,
+  ) async {
+    await _db.collection("likes").add({
+      "videoId": videoId,
+      "userId": userId,
+    });
+  }
+
   Future<QuerySnapshot<Map<String, dynamic>>> fetchVideos({
     int? lastItemCreatedAt,
   }) {
