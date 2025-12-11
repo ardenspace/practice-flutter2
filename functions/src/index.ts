@@ -1,4 +1,5 @@
 import * as admin from "firebase-admin";
+import * as functions from "firebase-functions/v1";
 import { onDocumentCreated } from "firebase-functions/v2/firestore";
 
 admin.initializeApp();
@@ -31,7 +32,10 @@ export const onVideoCreated = onDocumentCreated(
       destination: `thumbnails/${snapshot.id}.jpg`,
     });
     await file.makePublic();
-    await snapshot.ref.update({ thumbnailUrl: file.publicUrl() });
+    await snapshot.ref.update({
+      thumbnailUrl: file.publicUrl(),
+      likes: admin.firestore.FieldValue.increment(0), // likes 필드를 0으로 초기화
+    });
 
     const db = admin.firestore();
     await db
@@ -45,3 +49,40 @@ export const onVideoCreated = onDocumentCreated(
       });
   }
 );
+
+export const onLikedCreated = functions.firestore
+  .document("likes/{likeId}")
+  .onCreate(async (snapshot, context) => {
+    const db = admin.firestore();
+    const [videoId, _] = snapshot.id.split("000");
+    await db
+      .collection("videos")
+      .doc(videoId)
+      .update({
+        likes: admin.firestore.FieldValue.increment(1),
+      });
+  });
+
+export const onLikedRemoved = functions.firestore
+  .document("likes/{likeId}")
+  .onDelete(async (snapshot, context) => {
+    const db = admin.firestore();
+    const [videoId, _] = snapshot.id.split("000");
+    const videoDoc = await db.collection("videos").doc(videoId).get();
+    const currentLikes = videoDoc.data()?.likes ?? 0;
+
+    // likes가 0보다 크면 -1, 아니면 0으로 유지
+    if (currentLikes > 0) {
+      await db
+        .collection("videos")
+        .doc(videoId)
+        .update({
+          likes: admin.firestore.FieldValue.increment(-1),
+        });
+    } else {
+      // likes가 0이거나 없으면 0으로 설정
+      await db.collection("videos").doc(videoId).update({
+        likes: 0,
+      });
+    }
+  });
