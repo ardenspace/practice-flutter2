@@ -70,10 +70,6 @@ class VideoPostState extends ConsumerState<VideoPost>
       videoPostProvider(videoId).notifier,
     );
     await notifier.likeVideo();
-    final state = ref.read(videoPostProvider(videoId));
-    if (state.hasError && kDebugMode) {
-      print("Error liking video: ${state.error}");
-    }
   }
 
   void _initVideoPlayer() async {
@@ -394,7 +390,32 @@ class VideoPostState extends ConsumerState<VideoPost>
                     text: S
                         .of(context)
                         .likeCount(
-                          widget.videoData.likes ?? 0,
+                          ref
+                              .watch(
+                                videoLikesProvider(
+                                  widget.videoData.id ?? "",
+                                ),
+                              )
+                              .maybeWhen(
+                                data: (likes) => likes,
+                                orElse: () =>
+                                    widget
+                                        .videoData
+                                        .likes ??
+                                    0,
+                              ),
+                        ),
+                    iconColor: ref
+                        .watch(
+                          videoPostProvider(
+                            widget.videoData.id ?? "",
+                          ),
+                        )
+                        .maybeWhen(
+                          data: (isLiked) => isLiked
+                              ? Colors.red
+                              : Colors.white,
+                          orElse: () => Colors.white,
                         ),
                   ),
                 ),
