@@ -28,7 +28,9 @@ class _ChatDetailScreenState
 
     if (text == "") return;
 
-    ref.read(messagesProvider.notifier).sendMessage(text);
+    ref
+        .read(messagesProvider.notifier)
+        .sendMessage(text, widget.chatId);
     _editingController.clear();
   }
 
@@ -36,67 +38,121 @@ class _ChatDetailScreenState
   Widget build(BuildContext context) {
     final isLoading = ref.watch(messagesProvider).isLoading;
     final isDark = isDarkMode(context);
+    final chatRoomInfoAsync = ref.watch(
+      chatRoomInfoProvider(widget.chatId),
+    );
+
     return Scaffold(
       appBar: AppBar(
-        title: ListTile(
-          contentPadding: EdgeInsets.zero,
-          horizontalTitleGap: Sizes.size8,
-          leading: Stack(
-            clipBehavior: Clip.none,
-            children: [
-              const CircleAvatar(
-                radius: Sizes.size20,
-                foregroundImage: NetworkImage(
-                  "https://avatars.githubusercontent.com/u/202112113?s=400&u=d44fdf9d52f4e677b0dec4786da0cfde6bed80e7&v=4",
-                ),
-              ),
-              Positioned(
-                bottom: -3,
-                right: -3,
-                child: Container(
-                  width: Sizes.size16,
-                  height: Sizes.size16,
-                  decoration: BoxDecoration(
-                    color: Colors.green,
-                    shape: BoxShape.circle,
-                    border: Border.all(
-                      color: Colors.white,
-                      width: Sizes.size3,
-                    ),
+        title: chatRoomInfoAsync.when(
+          data: (chatRoomInfo) {
+            if (chatRoomInfo == null) {
+              return ListTile(
+                contentPadding: EdgeInsets.zero,
+                title: Text(
+                  widget.chatId,
+                  style: const TextStyle(
+                    fontWeight: FontWeight.w600,
                   ),
                 ),
+              );
+            }
+
+            final otherUser =
+                chatRoomInfo["otherUser"]
+                    as Map<String, dynamic>;
+            final otherUserName =
+                otherUser["name"] as String? ?? "Unknown";
+            final hasAvatar =
+                otherUser["hasAvatar"] == true;
+            final otherUserId = otherUser["uid"] as String;
+
+            return ListTile(
+              contentPadding: EdgeInsets.zero,
+              horizontalTitleGap: Sizes.size8,
+              leading: Stack(
+                clipBehavior: Clip.none,
+                children: [
+                  CircleAvatar(
+                    radius: Sizes.size20,
+                    foregroundImage: hasAvatar
+                        ? NetworkImage(
+                            "https://firebasestorage.googleapis.com/v0/b/tiktok-clone-4e0c0.appspot.com/o/avatars%2F$otherUserId?alt=media",
+                          )
+                        : null,
+                    child: !hasAvatar
+                        ? Text(
+                            otherUserName[0].toUpperCase(),
+                          )
+                        : null,
+                  ),
+                  Positioned(
+                    bottom: -3,
+                    right: -3,
+                    child: Container(
+                      width: Sizes.size16,
+                      height: Sizes.size16,
+                      decoration: BoxDecoration(
+                        color: Colors.green,
+                        shape: BoxShape.circle,
+                        border: Border.all(
+                          color: Colors.white,
+                          width: Sizes.size3,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
               ),
-            ],
-          ),
-          title: Text(
-            "Yeon Koung ${widget.chatId}",
-            style: const TextStyle(
-              fontWeight: FontWeight.w600,
+              title: Text(
+                otherUserName,
+                style: const TextStyle(
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+              subtitle: const Text("Active now"),
+              trailing: const Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  FaIcon(
+                    FontAwesomeIcons.flag,
+                    color: Colors.black,
+                    size: Sizes.size20,
+                  ),
+                  Gaps.h32,
+                  FaIcon(
+                    FontAwesomeIcons.ellipsis,
+                    color: Colors.black,
+                    size: Sizes.size20,
+                  ),
+                ],
+              ),
+            );
+          },
+          error: (error, stack) => ListTile(
+            contentPadding: EdgeInsets.zero,
+            title: Text(
+              widget.chatId,
+              style: const TextStyle(
+                fontWeight: FontWeight.w600,
+              ),
             ),
           ),
-          subtitle: const Text("Active now"),
-          trailing: const Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              FaIcon(
-                FontAwesomeIcons.flag,
-                color: Colors.black,
-                size: Sizes.size20,
+          loading: () => ListTile(
+            contentPadding: EdgeInsets.zero,
+            title: Text(
+              widget.chatId,
+              style: const TextStyle(
+                fontWeight: FontWeight.w600,
               ),
-              Gaps.h32,
-              FaIcon(
-                FontAwesomeIcons.ellipsis,
-                color: Colors.black,
-                size: Sizes.size20,
-              ),
-            ],
+            ),
           ),
         ),
       ),
       body: Stack(
         children: [
           ref
-              .watch(chatProvider)
+              .watch(chatProvider(widget.chatId))
               .when(
                 data: (data) {
                   return ListView.separated(
@@ -120,49 +176,121 @@ class _ChatDetailScreenState
                       final isMine =
                           message.userId ==
                           ref.watch(authRepo).user!.uid;
+
+                      // 5분 이내인지 확인
+                      final messageTime =
+                          DateTime.fromMillisecondsSinceEpoch(
+                            message.createdAt,
+                          );
+                      final now = DateTime.now();
+                      final canDelete =
+                          isMine &&
+                          message.id != null &&
+                          now
+                                  .difference(messageTime)
+                                  .inMinutes <
+                              5;
+
                       return Row(
                         mainAxisSize: MainAxisSize.min,
                         mainAxisAlignment: isMine
                             ? MainAxisAlignment.end
                             : MainAxisAlignment.start,
                         children: [
-                          Container(
-                            padding: const EdgeInsets.all(
-                              Sizes.size10,
-                            ),
-                            decoration: BoxDecoration(
-                              color: isMine
-                                  ? Colors.blue
-                                  : Theme.of(
-                                      context,
-                                    ).primaryColor,
-                              borderRadius: BorderRadius.only(
-                                topLeft:
-                                    const Radius.circular(
-                                      Sizes.size20,
-                                    ),
-                                topRight:
-                                    const Radius.circular(
-                                      Sizes.size20,
-                                    ),
-                                bottomLeft: Radius.circular(
-                                  isMine
-                                      ? Sizes.size20
-                                      : Sizes.size5,
-                                ),
-                                bottomRight:
-                                    Radius.circular(
-                                      isMine
-                                          ? Sizes.size5
-                                          : Sizes.size20,
-                                    ),
+                          GestureDetector(
+                            onLongPress: canDelete
+                                ? () {
+                                    showDialog(
+                                      context: context,
+                                      builder: (context) => AlertDialog(
+                                        title: const Text(
+                                          "Delete message",
+                                        ),
+                                        content: const Text(
+                                          "Are you sure you want to delete this message?",
+                                        ),
+                                        actions: [
+                                          TextButton(
+                                            onPressed: () =>
+                                                Navigator.of(
+                                                  context,
+                                                ).pop(),
+                                            child:
+                                                const Text(
+                                                  "Cancel",
+                                                ),
+                                          ),
+                                          TextButton(
+                                            onPressed: () {
+                                              Navigator.of(
+                                                context,
+                                              ).pop();
+                                              ref
+                                                  .read(
+                                                    messagesProvider
+                                                        .notifier,
+                                                  )
+                                                  .deleteMessage(
+                                                    widget
+                                                        .chatId,
+                                                    message
+                                                        .id!,
+                                                  );
+                                            },
+                                            style: TextButton.styleFrom(
+                                              foregroundColor:
+                                                  Colors
+                                                      .red,
+                                            ),
+                                            child:
+                                                const Text(
+                                                  "Delete",
+                                                ),
+                                          ),
+                                        ],
+                                      ),
+                                    );
+                                  }
+                                : null,
+                            child: Container(
+                              padding: const EdgeInsets.all(
+                                Sizes.size10,
                               ),
-                            ),
-                            child: Text(
-                              message.text,
-                              style: const TextStyle(
-                                color: Colors.white,
-                                fontSize: Sizes.size16,
+                              decoration: BoxDecoration(
+                                color: isMine
+                                    ? Colors.blue
+                                    : Theme.of(
+                                        context,
+                                      ).primaryColor,
+                                borderRadius: BorderRadius.only(
+                                  topLeft:
+                                      const Radius.circular(
+                                        Sizes.size20,
+                                      ),
+                                  topRight:
+                                      const Radius.circular(
+                                        Sizes.size20,
+                                      ),
+                                  bottomLeft:
+                                      Radius.circular(
+                                        isMine
+                                            ? Sizes.size20
+                                            : Sizes.size5,
+                                      ),
+                                  bottomRight:
+                                      Radius.circular(
+                                        isMine
+                                            ? Sizes.size5
+                                            : Sizes.size20,
+                                      ),
+                                ),
+                              ),
+                              child: Text(
+                                message.text,
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                  fontSize: Sizes.size16,
+                                ),
                               ),
                             ),
                           ),

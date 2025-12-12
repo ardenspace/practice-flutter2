@@ -14,7 +14,10 @@ class MessagesViewModel extends AsyncNotifier<void> {
     _repo = ref.read(messagesRepo);
   }
 
-  Future<void> sendMessage(String text) async {
+  Future<void> sendMessage(
+    String text,
+    String chatId,
+  ) async {
     final user = ref.read(authRepo).user;
     state = const AsyncValue.loading();
     state = await AsyncValue.guard(() async {
@@ -23,7 +26,17 @@ class MessagesViewModel extends AsyncNotifier<void> {
         userId: user!.uid,
         createdAt: DateTime.now().millisecondsSinceEpoch,
       );
-      _repo.sendMessage(message);
+      await _repo.sendMessage(message, chatId);
+    });
+  }
+
+  Future<void> deleteMessage(
+    String chatId,
+    String messageId,
+  ) async {
+    state = const AsyncValue.loading();
+    state = await AsyncValue.guard(() async {
+      await _repo.deleteMessage(chatId, messageId);
     });
   }
 }
@@ -33,23 +46,121 @@ final messagesProvider =
       () => MessagesViewModel(),
     );
 
-final chatProvider =
-    StreamProvider.autoDispose<List<MessageModel>>((ref) {
+final chatProvider = StreamProvider.autoDispose
+    .family<List<MessageModel>, String>((ref, chatRoomId) {
       final db = FirebaseFirestore.instance;
       return db
           .collection("chat_rooms")
-          .doc("BDdp3viVw2fFeIp73Z1Vfs9dr8o1")
+          .doc(chatRoomId)
           .collection("texts")
           .orderBy("createdAt")
           .snapshots()
           .map(
             (event) => event.docs
                 .map(
-                  (doc) =>
-                      MessageModel.fromJson(doc.data()),
+                  (doc) => MessageModel.fromJson(
+                    doc.data(),
+                    doc.id,
+                  ),
                 )
                 .toList()
                 .reversed
                 .toList(),
           );
+    });
+
+final chatRoomsProvider =
+    StreamProvider.autoDispose<List<String>>((ref) {
+      final user = ref.watch(authRepo).user;
+      if (user == null) return Stream.value([]);
+
+      final repo = ref.read(messagesRepo);
+      return repo.getChatRooms(user.uid);
+    });
+
+final usersProvider =
+    StreamProvider.autoDispose<List<Map<String, dynamic>>>((
+      ref,
+    ) {
+      final db = FirebaseFirestore.instance;
+      final currentUserId = ref.watch(authRepo).user?.uid;
+      if (currentUserId == null) return Stream.value([]);
+
+      return db
+          .collection("users")
+          .snapshots()
+          .map(
+            (snapshot) => snapshot.docs
+                .where((doc) => doc.id != currentUserId)
+                .map((doc) {
+                  final data = doc.data();
+                  data["uid"] = doc.id;
+                  return data;
+                })
+                .toList(),
+          );
+    });
+
+final chatRoomInfoProvider = StreamProvider.autoDispose
+    .family<Map<String, dynamic>?, String>((ref, chatId) {
+      final db = FirebaseFirestore.instance;
+      final currentUserId = ref.watch(authRepo).user?.uid;
+      if (currentUserId == null) return Stream.value(null);
+
+      return db
+          .collection("chat_rooms")
+          .doc(chatId)
+          .snapshots()
+          .asyncMap((chatRoomDoc) async {
+            if (!chatRoomDoc.exists) return null;
+
+            final chatRoomData = chatRoomDoc.data()!;
+            final participants = List<String>.from(
+              chatRoomData["participants"] ?? [],
+            );
+            final otherUserId = participants.firstWhere(
+              (id) => id != currentUserId,
+            );
+
+            // 상대방 정보 가져오기
+            final userDoc = await db
+                .collection("users")
+                .doc(otherUserId)
+                .get();
+            final otherUserData = userDoc.data();
+            if (otherUserData == null) return null;
+
+            // 마지막 메시지 가져오기
+            final lastMessageQuery = await db
+                .collection("chat_rooms")
+                .doc(chatId)
+                .collection("texts")
+                .orderBy("createdAt", descending: true)
+                .limit(1)
+                .get();
+
+            String? lastMessage;
+            int? lastMessageTime;
+            if (lastMessageQuery.docs.isNotEmpty) {
+              final lastMessageData = lastMessageQuery
+                  .docs
+                  .first
+                  .data();
+              lastMessage = lastMessageData["text"];
+              lastMessageTime =
+                  lastMessageData["createdAt"];
+            }
+
+            return {
+              "chatId": chatId,
+              "otherUser": {
+                "uid": otherUserId,
+                "name": otherUserData["name"],
+                "hasAvatar":
+                    otherUserData["hasAvatar"] ?? false,
+              },
+              "lastMessage": lastMessage,
+              "lastMessageTime": lastMessageTime,
+            };
+          });
     });
