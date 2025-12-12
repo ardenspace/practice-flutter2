@@ -100,9 +100,20 @@ class _ChatDetailScreenState
               .when(
                 data: (data) {
                   return ListView.separated(
-                    padding: const EdgeInsets.symmetric(
-                      vertical: Sizes.size10,
-                      horizontal: Sizes.size14,
+                    reverse: true,
+                    padding: EdgeInsets.only(
+                      top: Sizes.size10,
+                      bottom:
+                          MediaQuery.of(
+                            context,
+                          ).padding.bottom +
+                          Sizes.size20 *
+                              2 + // Container vertical padding
+                          Sizes
+                              .size56 + // TextField approximate height
+                          Sizes.size10, // Extra spacing
+                      left: Sizes.size14,
+                      right: Sizes.size14,
                     ),
                     itemBuilder: (context, index) {
                       final message = data[index];
@@ -172,81 +183,84 @@ class _ChatDetailScreenState
           Positioned(
             bottom: 0,
             width: MediaQuery.of(context).size.width,
-            child: Container(
-              color: isDark
-                  ? Colors.black
-                  : Colors.grey.shade50,
-              padding: const EdgeInsets.symmetric(
-                horizontal: Sizes.size14,
-                vertical: Sizes.size20,
-              ),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: TextField(
-                      controller: _editingController,
-                      decoration: InputDecoration(
-                        contentPadding:
-                            const EdgeInsets.only(
-                              left: Sizes.size16,
+            child: SafeArea(
+              child: Container(
+                color: isDark
+                    ? Colors.black
+                    : Colors.grey.shade50,
+                padding: const EdgeInsets.symmetric(
+                  horizontal: Sizes.size14,
+                  vertical: Sizes.size20,
+                ),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: TextField(
+                        controller: _editingController,
+                        decoration: InputDecoration(
+                          contentPadding:
+                              const EdgeInsets.only(
+                                left: Sizes.size16,
+                              ),
+                          hintText: "Send a message...",
+                          hintStyle: TextStyle(
+                            color: Colors.grey.shade500,
+                          ),
+                          suffixIcon: const Padding(
+                            padding: EdgeInsets.all(
+                              Sizes.size16,
                             ),
-                        hintText: "Send a message...",
-                        hintStyle: TextStyle(
-                          color: Colors.grey.shade500,
-                        ),
-                        suffixIcon: const Padding(
-                          padding: EdgeInsets.all(
-                            Sizes.size16,
+                            child: FaIcon(
+                              FontAwesomeIcons.faceSmile,
+                              color: Colors.black,
+                              size: Sizes.size24,
+                            ),
                           ),
-                          child: FaIcon(
-                            FontAwesomeIcons.faceSmile,
-                            color: Colors.black,
-                            size: Sizes.size24,
+                          border: const OutlineInputBorder(
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(Sizes.size20),
+                            ),
+                            borderSide: BorderSide.none,
                           ),
+                          filled: true,
+                          fillColor: isDark
+                              ? Colors.grey.shade800
+                              : Colors.white,
                         ),
-                        border: const OutlineInputBorder(
-                          borderRadius: BorderRadius.all(
-                            Radius.circular(Sizes.size20),
-                          ),
-                          borderSide: BorderSide.none,
-                        ),
-                        filled: true,
-                        fillColor: isDark
-                            ? Colors.grey.shade800
-                            : Colors.white,
                       ),
                     ),
-                  ),
-                  Gaps.h10,
-                  ElevatedButton(
-                    onPressed: isLoading
-                        ? null
-                        : _onSendPressed,
-                    child: Container(
-                      padding: const EdgeInsets.all(
-                        Sizes.size12,
-                      ),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(
-                          Sizes.size48,
+                    Gaps.h10,
+                    ElevatedButton(
+                      onPressed: isLoading
+                          ? null
+                          : _onSendPressed,
+                      child: Container(
+                        padding: const EdgeInsets.all(
+                          Sizes.size12,
                         ),
-                        color: isDark
-                            ? Colors.grey.shade500
-                            : Colors.grey.shade300,
-                      ),
-                      child: FaIcon(
-                        isLoading
-                            ? FontAwesomeIcons.hourglass
-                            : FontAwesomeIcons
-                                  .solidPaperPlane,
-                        color: isDark
-                            ? Colors.black
-                            : Colors.white,
-                        size: Sizes.size20,
+                        decoration: BoxDecoration(
+                          borderRadius:
+                              BorderRadius.circular(
+                                Sizes.size48,
+                              ),
+                          color: isDark
+                              ? Colors.grey.shade500
+                              : Colors.grey.shade300,
+                        ),
+                        child: FaIcon(
+                          isLoading
+                              ? FontAwesomeIcons.hourglass
+                              : FontAwesomeIcons
+                                    .solidPaperPlane,
+                          color: isDark
+                              ? Colors.black
+                              : Colors.white,
+                          size: Sizes.size20,
+                        ),
                       ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
           ),

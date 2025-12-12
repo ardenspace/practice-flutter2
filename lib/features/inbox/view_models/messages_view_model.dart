@@ -48,6 +48,8 @@ final chatProvider =
                   (doc) =>
                       MessageModel.fromJson(doc.data()),
                 )
+                .toList()
+                .reversed
                 .toList(),
           );
     });
