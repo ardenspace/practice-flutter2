@@ -32,6 +32,20 @@ class NotificationProvider extends AsyncNotifier {
       );
       print(event.notification?.title);
     });
+
+    // for Background
+    FirebaseMessaging.onMessageOpenedApp.listen((
+      notification,
+    ) {
+      print('💓💓💓💓💓💓${notification.data['screen']}');
+    });
+
+    // for Terminated
+    final notification = await _messaging
+        .getInitialMessage();
+    if (notification != null) {
+      print('✨✨✨✨✨${notification.data['screen']}');
+    }
   }
 
   @override
