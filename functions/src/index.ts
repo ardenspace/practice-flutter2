@@ -54,32 +54,68 @@ export const onLikedCreated = functions.firestore
   .document("likes/{likeId}")
   .onCreate(async (snapshot, context) => {
     const db = admin.firestore();
-    const [videoId, _] = snapshot.id.split("000");
+    const [videoId, userId] = snapshot.id.split("000");
+
+    // videoId가 유효한지 확인
+    if (!videoId) {
+      console.error("Invalid likeId format:", snapshot.id);
+      return;
+    }
+
+    // 좋아요 수 증가
     await db
       .collection("videos")
       .doc(videoId)
       .update({
         likes: admin.firestore.FieldValue.increment(1),
       });
-    const video = (await db.collection("videos").doc(videoId).get()).data();
 
-    if (video) {
-      const creatorUid = video.creatorUid;
-      const user = await (
-        await db.collection("users").doc(creatorUid).get()
-      ).data();
-      if (user) {
-        const token = user.token;
-        await admin.messaging().sendToDevice(token, {
-          data: {
-            screen: "123",
-          },
-          notification: {
-            title: "someone liked you video",
-            body: "Likes + 1 ! Congrats ! 💓💓",
-          },
-        });
-      }
+    const videoDoc = await db.collection("videos").doc(videoId).get();
+    const video = videoDoc.data();
+
+    if (!video) {
+      console.error("Video not found:", videoId);
+      return;
+    }
+
+    const creatorUid = video.creatorUid;
+
+    // 자기 자신의 비디오에 좋아요를 누른 경우 알림을 보내지 않음
+    if (userId === creatorUid) {
+      return;
+    }
+
+    const userDoc = await db.collection("users").doc(creatorUid).get();
+    const user = userDoc.data();
+
+    if (!user) {
+      console.error("User not found:", creatorUid);
+      return;
+    }
+
+    const token = user.token;
+
+    // token이 없거나 유효하지 않은 경우
+    if (!token || typeof token !== "string") {
+      console.warn("Invalid or missing token for user:", creatorUid);
+      return;
+    }
+
+    try {
+      // sendToDevice는 deprecated, send를 사용
+      await admin.messaging().send({
+        token: token,
+        data: {
+          screen: "video", // 또는 실제 비디오 화면으로 이동하는 route name
+          videoId: videoId,
+        },
+        notification: {
+          title: "Someone liked your video",
+          body: "Likes + 1 ! Congrats ! 💓💓",
+        },
+      });
+    } catch (error) {
+      console.error("Error sending notification:", error);
     }
   });
 
